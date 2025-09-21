@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang=                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/students}">
+                            <i class="bi bi-people-fill me-1"></i> Students
+                        </a>
+                    </li>
+                    <!-- Database tab - Only show in development mode -->
+                    <li class="nav-item" th:if="${isDevelopmentMode and h2ConsoleEnabled}">
+                        <a class="nav-link" th:href="@{/h2-console}" target="_blank">
+                            <i class="bi bi-database me-1"></i> 
+                            <span class="badge bg-warning text-dark ms-1">DEV</span>
+                            Database
+                        </a>
+                    </li>:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${student.id != null ? 'Edit Student' : 'Add Student'} + ' - Student Performance Monitor'">Add Student - Student Performance Monitor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/}">
+                <i class="bi bi-mortarboard-fill me-2"></i>
+                Student Monitor
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/}">
+                            <i class="bi bi-house-fill me-1"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/students}">
+                            <i class="bi bi-people-fill me-1"></i> Students
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/h2-console}" target="_blank">
+                            <i class="bi bi-database me-1"></i> Database
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Alert Messages -->
+    <div class="container mt-3">
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <span th:text="${errorMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container my-4">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/}" class="text-decoration-none">Home</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/students}" class="text-decoration-none">Students</a></li>
+                <li class="breadcrumb-item active" th:text="${student.id != null ? 'Edit Student' : 'Add Student'}">Add Student</li>
+            </ol>
+        </nav>
+
+        <!-- Page Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="h2 mb-1" th:text="${student.id != null ? 'Edit Student' : 'Add New Student'}">
+                    <i class="bi bi-person-plus-fill me-2 text-primary"></i>
+                    Add New Student
+                </h1>
+                <p class="text-muted mb-0" th:text="${student.id != null ? 'Update student information' : 'Enter student details to create a new record'}">Enter student details to create a new record</p>
+            </div>
+            <a th:href="@{/students}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i>
+                Back to Students
+            </a>
+        </div>
+
+        <!-- Student Form -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white border-bottom">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-person-badge me-2"></i>
+                            Student Information
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="${student.id != null ? '/students/' + student.id : '/students'}" 
+                              method="post" th:object="${student}" novalidate>
+                            
+                            <div class="row g-3">
+                                <!-- First Name -->
+                                <div class="col-md-6">
+                                    <label for="firstName" class="form-label">
+                                        <i class="bi bi-person me-1"></i>
+                                        First Name *
+                                    </label>
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="firstName" 
+                                           th:field="*{firstName}"
+                                           placeholder="Enter first name"
+                                           required>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">
+                                        First name is required.
+                                    </div>
+                                </div>
+
+                                <!-- Last Name -->
+                                <div class="col-md-6">
+                                    <label for="lastName" class="form-label">
+                                        <i class="bi bi-person me-1"></i>
+                                        Last Name *
+                                    </label>
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="lastName" 
+                                           th:field="*{lastName}"
+                                           placeholder="Enter last name"
+                                           required>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">
+                                        Last name is required.
+                                    </div>
+                                </div>
+
+                                <!-- Email -->
+                                <div class="col-12">
+                                    <label for="email" class="form-label">
+                                        <i class="bi bi-envelope me-1"></i>
+                                        Email Address *
+                                    </label>
+                                    <input type="email" 
+                                           class="form-control" 
+                                           id="email" 
+                                           th:field="*{email}"
+                                           placeholder="Enter email address"
+                                           required>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
+                                        Please provide a valid email address.
+                                    </div>
+                                </div>
+
+                                <!-- Date of Birth -->
+                                <div class="col-md-6">
+                                    <label for="dateOfBirth" class="form-label">
+                                        <i class="bi bi-calendar me-1"></i>
+                                        Date of Birth
+                                    </label>
+                                    <input type="date" 
+                                           class="form-control" 
+                                           id="dateOfBirth" 
+                                           th:field="*{dateOfBirth}">
+                                    <div class="form-text">Optional field</div>
+                                </div>
+                            </div>
+
+                            <!-- Form Actions -->
+                            <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                                <a th:href="@{/students}" class="btn btn-outline-secondary">
+                                    <i class="bi bi-x-lg me-1"></i>
+                                    Cancel
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i th:class="${student.id != null ? 'bi bi-check-lg me-1' : 'bi bi-plus-lg me-1'}"></i>
+                                    <span th:text="${student.id != null ? 'Update Student' : 'Create Student'}">Create Student</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Help Card -->
+                <div class="card border-0 bg-light mt-4">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <i class="bi bi-info-circle me-2"></i>
+                            Help & Guidelines
+                        </h6>
+                        <ul class="mb-0 small text-muted">
+                            <li>Fields marked with * are required</li>
+                            <li>Email address must be unique for each student</li>
+                            <li>Date of birth is optional but recommended for age-based analytics</li>
+                            <li>All information can be updated later if needed</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-light py-4 mt-5">
+        <div class="container text-center">
+            <p class="text-muted mb-0">
+                © 2025 Student Performance Monitor | Built with Spring Boot & Thymeleaf
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Form validation
+        (function() {
+            'use strict';
+            
+            // Get form
+            const form = document.querySelector('form');
+            
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                
+                form.classList.add('was-validated');
+            }, false);
+        })();
+    </script>
+</body>
+</html>

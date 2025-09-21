@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle}">Register - Student Monitor</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+        
+        .register-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .register-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px 15px 0 0;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .register-form {
+            padding: 2rem;
+        }
+        
+        .form-control {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .form-control.is-invalid {
+            border-color: #dc3545;
+        }
+        
+        .form-control.is-valid {
+            border-color: #28a745;
+        }
+        
+        .btn-register {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .alert {
+            border-radius: 10px;
+            border: none;
+        }
+        
+        .input-group-text {
+            background: transparent;
+            border: 2px solid #e9ecef;
+            border-right: none;
+            border-radius: 10px 0 0 10px;
+        }
+        
+        .input-group .form-control {
+            border-left: none;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .input-group:focus-within .input-group-text {
+            border-color: #667eea;
+        }
+        
+        .login-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .login-link:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+        
+        .password-strength {
+            height: 5px;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+        
+        .availability-check {
+            font-size: 0.875rem;
+        }
+        
+        .availability-check.available {
+            color: #28a745;
+        }
+        
+        .availability-check.unavailable {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="register-container">
+                    <div class="register-header">
+                        <h2 class="mb-0">
+                            <i class="bi bi-person-plus-fill me-2"></i>
+                            Create Account
+                        </h2>
+                        <p class="mb-0 mt-2 opacity-75">Join the Student Monitor platform</p>
+                    </div>
+                    
+                    <div class="register-form">
+                        <!-- Error Message -->
+                        <div th:if="${errorMessage}" class="alert alert-danger d-flex align-items-center mb-4" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            <span th:text="${errorMessage}">Error message</span>
+                        </div>
+                        
+                        <!-- Registration Form -->
+                        <form th:action="@{/register}" method="post" th:object="${user}" id="registrationForm">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="firstName" class="form-label fw-bold">
+                                        <i class="bi bi-person me-1"></i>First Name
+                                    </label>
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="firstName" 
+                                           th:field="*{firstName}"
+                                           placeholder="Enter your first name"
+                                           required>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">
+                                        First name error
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="lastName" class="form-label fw-bold">
+                                        <i class="bi bi-person me-1"></i>Last Name
+                                    </label>
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="lastName" 
+                                           th:field="*{lastName}"
+                                           placeholder="Enter your last name"
+                                           required>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">
+                                        Last name error
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="username" class="form-label fw-bold">
+                                    <i class="bi bi-at me-1"></i>Username
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-at"></i>
+                                    </span>
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="username" 
+                                           th:field="*{username}"
+                                           placeholder="Choose a username"
+                                           required>
+                                </div>
+                                <div class="availability-check mt-1" id="usernameCheck"></div>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">
+                                    Username error
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="email" class="form-label fw-bold">
+                                    <i class="bi bi-envelope me-1"></i>Email Address
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-envelope"></i>
+                                    </span>
+                                    <input type="email" 
+                                           class="form-control" 
+                                           id="email" 
+                                           th:field="*{email}"
+                                           placeholder="Enter your email address"
+                                           required>
+                                </div>
+                                <div class="availability-check mt-1" id="emailCheck"></div>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
+                                    Email error
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="password" class="form-label fw-bold">
+                                    <i class="bi bi-lock me-1"></i>Password
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-lock"></i>
+                                    </span>
+                                    <input type="password" 
+                                           class="form-control" 
+                                           id="password" 
+                                           th:field="*{password}"
+                                           placeholder="Create a strong password"
+                                           required>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="password-strength bg-light" id="passwordStrength"></div>
+                                    <small class="text-muted mt-1 d-block">
+                                        Password must be at least 6 characters long
+                                    </small>
+                                </div>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
+                                    Password error
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="confirmPassword" class="form-label fw-bold">
+                                    <i class="bi bi-lock-fill me-1"></i>Confirm Password
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-lock-fill"></i>
+                                    </span>
+                                    <input type="password" 
+                                           class="form-control" 
+                                           id="confirmPassword" 
+                                           name="confirmPassword"
+                                           placeholder="Confirm your password"
+                                           required>
+                                </div>
+                                <div class="invalid-feedback" id="confirmPasswordError" th:if="${confirmPasswordError}" th:text="${confirmPasswordError}">
+                                    Confirm password error
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid mb-3">
+                                <button type="submit" class="btn btn-primary btn-register" id="submitBtn">
+                                    <i class="bi bi-person-plus me-2"></i>
+                                    Create Account
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <hr class="my-4">
+                        
+                        <div class="text-center">
+                            <p class="mb-0">Already have an account?</p>
+                            <a th:href="@{/login}" class="login-link">
+                                <i class="bi bi-box-arrow-in-right me-1"></i>
+                                Sign in here
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const usernameInput = document.getElementById('username');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            const usernameCheck = document.getElementById('usernameCheck');
+            const emailCheck = document.getElementById('emailCheck');
+            const passwordStrength = document.getElementById('passwordStrength');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // Focus on first name field
+            document.getElementById('firstName').focus();
+            
+            // Username availability check
+            let usernameTimeout;
+            usernameInput.addEventListener('input', function() {
+                clearTimeout(usernameTimeout);
+                const username = this.value.trim();
+                
+                if (username.length >= 3) {
+                    usernameTimeout = setTimeout(() => {
+                        checkAvailability('/api/check-username', username, usernameCheck, 'Username');
+                    }, 500);
+                } else {
+                    usernameCheck.textContent = '';
+                    usernameCheck.className = 'availability-check';
+                }
+            });
+            
+            // Email availability check
+            let emailTimeout;
+            emailInput.addEventListener('input', function() {
+                clearTimeout(emailTimeout);
+                const email = this.value.trim();
+                
+                if (email.includes('@')) {
+                    emailTimeout = setTimeout(() => {
+                        checkAvailability('/api/check-email', email, emailCheck, 'Email');
+                    }, 500);
+                } else {
+                    emailCheck.textContent = '';
+                    emailCheck.className = 'availability-check';
+                }
+            });
+            
+            // Password strength indicator
+            passwordInput.addEventListener('input', function() {
+                const password = this.value;
+                const strength = calculatePasswordStrength(password);
+                updatePasswordStrength(strength);
+            });
+            
+            // Confirm password validation
+            confirmPasswordInput.addEventListener('input', function() {
+                validatePasswordMatch();
+            });
+            
+            passwordInput.addEventListener('input', function() {
+                if (confirmPasswordInput.value) {
+                    validatePasswordMatch();
+                }
+            });
+            
+            function checkAvailability(url, value, element, fieldName) {
+                fetch(`${url}?${fieldName.toLowerCase()}=${encodeURIComponent(value)}`)
+                    .then(response => response.json())
+                    .then(available => {
+                        if (available) {
+                            element.innerHTML = `<i class="bi bi-check-circle-fill me-1"></i>${fieldName} is available`;
+                            element.className = 'availability-check available';
+                        } else {
+                            element.innerHTML = `<i class="bi bi-x-circle-fill me-1"></i>${fieldName} is already taken`;
+                            element.className = 'availability-check unavailable';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error checking availability:', error);
+                        element.textContent = '';
+                        element.className = 'availability-check';
+                    });
+            }
+            
+            function calculatePasswordStrength(password) {
+                let strength = 0;
+                if (password.length >= 6) strength += 25;
+                if (password.length >= 8) strength += 25;
+                if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength += 25;
+                if (/\d/.test(password)) strength += 15;
+                if (/[^a-zA-Z\d]/.test(password)) strength += 10;
+                return Math.min(strength, 100);
+            }
+            
+            function updatePasswordStrength(strength) {
+                let color, text;
+                if (strength < 25) {
+                    color = '#dc3545';
+                    text = 'Weak';
+                } else if (strength < 50) {
+                    color = '#ffc107';
+                    text = 'Fair';
+                } else if (strength < 75) {
+                    color = '#17a2b8';
+                    text = 'Good';
+                } else {
+                    color = '#28a745';
+                    text = 'Strong';
+                }
+                
+                passwordStrength.style.width = strength + '%';
+                passwordStrength.style.backgroundColor = color;
+                passwordStrength.setAttribute('title', text + ' password');
+            }
+            
+            function validatePasswordMatch() {
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+                
+                if (confirmPassword && password !== confirmPassword) {
+                    confirmPasswordInput.classList.add('is-invalid');
+                    confirmPasswordInput.classList.remove('is-valid');
+                } else if (confirmPassword) {
+                    confirmPasswordInput.classList.remove('is-invalid');
+                    confirmPasswordInput.classList.add('is-valid');
+                }
+            }
+            
+            // Form validation
+            const form = document.getElementById('registrationForm');
+            form.addEventListener('submit', function(event) {
+                let isValid = true;
+                
+                // Check password match
+                if (passwordInput.value !== confirmPasswordInput.value) {
+                    confirmPasswordInput.classList.add('is-invalid');
+                    isValid = false;
+                }
+                
+                if (!isValid) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                
+                form.classList.add('was-validated');
+            });
+        });
+    </script>
+</body>
+</html>
