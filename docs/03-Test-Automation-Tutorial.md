@@ -36,6 +36,12 @@ $env:JAVA_HOME = "C:\Program Files\Java\jdk-17"
 <dependencies>
     <!-- Existing dependencies... -->
     
+    <!-- Spring Boot Actuator for health checks -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    
     <!-- Selenium Dependencies -->
     <dependency>
         <groupId>org.seleniumhq.selenium</groupId>
@@ -875,13 +881,13 @@ jobs:
         restore-keys: ${{ runner.os }}-m2
 
     - name: 🧪 Run Unit Tests
-      run: ./mvnw clean test -Dtest=*Test -DexcludedGroups=integration,ui
+      run: ./mvnw clean test -Dspring.profiles.active=ci -Dtest="*Test" -DexcludedGroups=integration,ui
 
     - name: 🔌 Run Integration Tests (API Tests)
-      run: ./mvnw test -Dtest="**/*ApiTest"
+      run: ./mvnw test -Dspring.profiles.active=ci -Dtest="**/*ApiTest"
 
     - name: 🥒 Run BDD Tests
-      run: ./mvnw test -Dtest=CucumberTestRunner
+      run: ./mvnw test -Dspring.profiles.active=ci -Dtest=CucumberTestRunner
 
     - name: 📊 Generate Test Reports
       run: ./mvnw surefire-report:report site:site
@@ -917,9 +923,28 @@ jobs:
 
     - name: 🚀 Start Application
       run: |
-        ./mvnw spring-boot:run -Dspring.profiles.active=test &
-        sleep 45
-        curl --retry 10 --retry-connrefused http://localhost:8080/actuator/health || exit 1
+        # Build the application first
+        ./mvnw clean package -DskipTests
+        
+        # Start application in background with test profile
+        nohup java -jar target/*.jar --spring.profiles.active=test --server.port=8080 --management.endpoints.web.exposure.include=health,info > app.log 2>&1 &
+        
+        # Wait for application to start (increased timeout)
+        echo "Waiting for application to start..."
+        for i in {1..60}; do
+          if curl -sf http://localhost:8080/actuator/health > /dev/null 2>&1; then
+            echo "✅ Application is ready after ${i} seconds"
+            break
+          fi
+          if [ $i -eq 60 ]; then
+            echo "❌ Application failed to start within 60 seconds"
+            echo "Application logs:"
+            cat app.log
+            exit 1
+          fi
+          echo "Attempt ${i}/60: Waiting for application..."
+          sleep 1
+        done
 
     - name: 🖥️ Run UI Tests
       env:
@@ -1053,10 +1078,10 @@ jobs:
 
 ### **Step 3: Create CI-Specific Test Configuration**
 
-**Create File:** `src/test/resources/application-ci.properties`
+**Create File:** `src/test/resources/application-test.properties`
 
 ```properties
-# CI/CD Test Configuration
+# CI/CD Test Configuration for Running App
 spring.datasource.url=jdbc:h2:mem:testdb
 spring.datasource.driver-class-name=org.h2.Driver
 spring.datasource.username=sa
@@ -1066,16 +1091,24 @@ spring.jpa.hibernate.ddl-auto=create-drop
 spring.jpa.show-sql=false
 spring.jpa.properties.hibernate.format_sql=false
 
-# Disable web server for unit tests
-spring.main.web-application-type=none
+# Enable web server for UI tests
+spring.main.web-application-type=servlet
+server.port=8080
+
+# Actuator endpoints for health checks
+management.endpoints.web.exposure.include=health,info
+management.endpoint.health.show-details=always
+management.endpoints.web.base-path=/actuator
 
 # Logging configuration for CI
-logging.level.com.example.studentmonitor=WARN
+logging.level.com.example.studentmonitor=INFO
 logging.level.org.springframework=WARN
 logging.level.org.hibernate=WARN
+logging.level.org.springframework.boot.actuate=INFO
 
-# Test-specific settings
-spring.test.mockmvc.print=none
+# Fast startup for tests
+spring.jpa.defer-datasource-initialization=true
+spring.sql.init.mode=always
 
 # Selenium CI Configuration
 selenium.headless=true
@@ -1086,6 +1119,26 @@ selenium.implicit-wait=10
 # Chrome driver settings for CI
 webdriver.chrome.driver.silent=true
 webdriver.chrome.verboseLogging=false
+```
+
+**Also create:** `src/test/resources/application-ci.properties`
+
+```properties
+# CI-specific configuration for unit tests only
+spring.datasource.url=jdbc:h2:mem:testdb
+spring.datasource.driver-class-name=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+
+spring.jpa.hibernate.ddl-auto=create-drop
+spring.jpa.show-sql=false
+
+# Disable web server for unit tests
+spring.main.web-application-type=none
+
+# Minimal logging for unit tests
+logging.level.root=WARN
+logging.level.com.example.studentmonitor=WARN
 ```
 
 ### **Step-by-Step CI/CD Setup Procedure:**
