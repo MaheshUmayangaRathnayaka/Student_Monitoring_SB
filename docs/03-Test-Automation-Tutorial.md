@@ -999,14 +999,194 @@ git push origin main
    - GitHub Actions starts within 10-30 seconds
 
 **Step 9: Monitor Pipeline Execution**
+
+**9.1: Access GitHub Actions Dashboard**
    - Go to GitHub repository → **Actions** tab
    - Click on the running workflow
-   - Watch real-time execution logs:
-     - 🧪 **Test Job**: Unit, Integration, BDD tests
-     - 🖥️ **UI Tests**: Selenium automated tests
-     - 🔍 **Security**: OWASP dependency checks
-     - 🏗️ **Build**: Application packaging
-     - 🚀 **Deploy**: Staging/Production deployment
+   - You should see the pipeline status dashboard
+
+**Expected Response - Pipeline Overview:**
+```
+📊 GitHub Actions Dashboard View:
+┌─────────────────────────────────────────────────────────────┐
+│ 🏃‍♂️ Student Monitor CI/CD Pipeline                          │
+│ ⚡ Triggered by: push to main                              │
+│ 🕐 Started: 1 minute ago                                   │
+│ 👤 Commit: "Add comprehensive CI/CD pipeline"              │
+│                                                             │
+│ Pipeline Status: 🟡 IN PROGRESS                           │
+│                                                             │
+│ Jobs Progress:                                              │
+│ ✅ test              (2m 30s) - COMPLETED                 │
+│ 🟡 ui-tests          (1m 45s) - RUNNING                   │
+│ ⏳ security-quality  - QUEUED (waiting for test)          │
+│ ⏳ build             - QUEUED (waiting for dependencies)   │
+│ ⏳ deploy-staging    - QUEUED (waiting for build)         │
+│ ⏳ deploy-production - QUEUED (waiting for build)         │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**9.2: Click on Individual Jobs to See Detailed Logs**
+
+**Expected Response - Test Job (✅ Completed Successfully):**
+```
+🧪 Run Tests - Execution Log:
+┌─────────────────────────────────────────────────────────────┐
+│ ✅ 📥 Checkout code                        (15s)           │
+│ ✅ ☕ Set up JDK 17                       (45s)           │
+│ ✅ 📦 Cache Maven dependencies            (12s)           │
+│ ✅ 🧪 Run Unit Tests                      (35s)           │
+│    [INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0│
+│    [INFO] AuthServiceTest ................. PASSED        │
+│    [INFO] StudentServiceTest .............. PASSED        │
+│ ✅ 🔌 Run Integration Tests (API Tests)   (25s)           │
+│    [INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0│
+│    [INFO] AuthApiTest ..................... PASSED        │
+│    [INFO] StudentApiTest .................. PASSED        │
+│ ✅ 🥒 Run BDD Tests                       (40s)           │
+│    [INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0│
+│    [INFO] Cucumber scenarios: 7 passed, 0 failed         │
+│ ✅ 📊 Generate Test Reports               (20s)           │
+│ ✅ 📤 Upload Test Results                 (8s)            │
+│                                                             │
+│ 🎉 JOB COMPLETED SUCCESSFULLY - Total: 2m 30s            │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Expected Response - UI Tests Job (🟡 Currently Running):**
+```
+🖥️ Run UI Tests - Live Execution Log:
+┌─────────────────────────────────────────────────────────────┐
+│ ✅ 📥 Checkout code                        (15s)           │
+│ ✅ ☕ Set up JDK 17                       (45s)           │
+│ ✅ 🌐 Set up Chrome Browser               (30s)           │
+│    Chrome 118.0.5993.88 installed successfully            │
+│ ✅ 🚀 Start Application                   (45s)           │
+│    Application started on port 8080                        │
+│    Health check: http://localhost:8080/actuator/health ✅  │
+│ 🟡 🖥️ Run UI Tests                        (Running...)    │
+│    [INFO] Running LoginUITest                              │
+│    🔍 Running Home Page Navigation Test                    │
+│    ✅ Browser started - Testing URL: http://localhost:8080 │
+│    ✅ Navigation test passed                               │
+│    🔍 Running Home Page Title Test                         │
+│    ✅ Home page loaded with title: Student Performance... │
+│    [INFO] Running RegistrationUITest                       │
+│    🔍 Testing user registration flow...                    │
+│                                                             │
+│ 🟡 IN PROGRESS - Elapsed: 1m 45s                         │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**9.3: Watch Real-Time Progress Indicators**
+
+**Expected Response - Complete Pipeline Timeline:**
+```
+📈 Pipeline Execution Timeline:
+┌─────────────────────────────────────────────────────────────┐
+│ 0:00 ──── ⚡ Pipeline Triggered                            │
+│ 0:15 ──── 🧪 Test Job Started                             │
+│ 2:45 ──── ✅ Test Job Completed (21 tests passed)         │
+│ 2:50 ────┬── �️ UI Tests Started                          │
+│          └── �🔍 Security & Quality Started                │
+│ 6:35 ──── ✅ UI Tests Completed (3 UI tests passed)       │
+│ 4:05 ──── ✅ Security & Quality Completed (0 vulnerabilities)│
+│ 6:40 ──── 🏗️ Build Started                               │
+│ 7:50 ──── ✅ Build Completed (JAR created: 15.2 MB)       │
+│ 8:00 ──── 🚀 Deploy Production Started                    │
+│ 8:45 ──── ✅ Deploy Production Completed                  │
+│                                                             │
+│ 🎉 PIPELINE SUCCESS - Total Duration: 8m 45s             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**9.4: Final Success Response**
+
+**Expected Response - Successful Pipeline Completion:**
+```
+🎉 Pipeline Completed Successfully!
+┌─────────────────────────────────────────────────────────────┐
+│ ✅ Student Monitor CI/CD Pipeline - SUCCESS                │
+│ 🕐 Total Duration: 8m 45s                                  │
+│ 📅 Completed: September 27, 2025 at 10:45 AM              │
+│                                                             │
+│ 📊 Test Results Summary:                                   │
+│ • Unit Tests: 8/8 passed ✅                               │
+│ • Integration Tests: 6/6 passed ✅                        │
+│ • BDD Tests: 7/7 scenarios passed ✅                      │
+│ • UI Tests: 3/3 passed ✅                                 │
+│ • Security Scan: 0 vulnerabilities found ✅              │
+│ • Code Coverage: 87.3% ✅                                 │
+│                                                             │
+│ 📦 Artifacts Generated:                                    │
+│ • student-monitor-0.0.1-SNAPSHOT.jar (15.2 MB)           │
+│ • Test Reports (HTML + XML)                               │
+│ • Coverage Reports (JaCoCo)                               │
+│ • Security Reports (OWASP)                                │
+│                                                             │
+│ 🚀 Deployment Status:                                     │
+│ • Production: ✅ DEPLOYED (http://your-app.com)           │
+│                                                             │
+│ 🔗 Quick Links:                                           │
+│ • View Test Reports                                        │
+│ • Download Artifacts                                       │
+│ • View Coverage Report                                     │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**9.5: Artifacts Available for Download**
+
+**Expected Response - Artifacts Section:**
+```
+📦 Build Artifacts (Available for 90 days):
+┌─────────────────────────────────────────────────────────────┐
+│ 📄 test-results (5.2 MB)                                   │
+│    └── Surefire reports, site documentation               │
+│                                                             │
+│ 📄 ui-test-results (1.8 MB)                               │
+│    └── Selenium test execution logs                        │
+│                                                             │
+│ 📄 security-reports (2.1 MB)                              │
+│    └── OWASP dependency check, JaCoCo coverage            │
+│                                                             │
+│ 📄 jar-artifacts (15.2 MB)                                │
+│    └── student-monitor-0.0.1-SNAPSHOT.jar                 │
+│                                                             │
+│ 🔽 Download All | 📊 View Reports | 📈 View Metrics       │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**9.6: Email Notification Response**
+
+**Expected Response - GitHub Email Notification:**
+```
+📧 Email: "GitHub Actions: Workflow run completed"
+──────────────────────────────────────────────────────
+From: GitHub Actions <noreply@github.com>
+To: your-email@example.com
+Subject: ✅ Student Monitor CI/CD Pipeline succeeded
+
+✅ Your workflow run has completed successfully!
+
+Repository: YOUR_USERNAME/student-monitoring-system
+Workflow: Student Monitor CI/CD Pipeline
+Branch: main
+Commit: Add comprehensive CI/CD pipeline (abc123f)
+
+Duration: 8m 45s
+Jobs: 6/6 successful
+
+View details: https://github.com/YOUR_USERNAME/repo/actions/runs/123456
+──────────────────────────────────────────────────────
+```
+
+**Key Success Indicators to Look For:**
+- ✅ All 6 jobs show green checkmarks
+- ✅ Test counts: 24 total tests passed (8 unit + 6 API + 7 BDD + 3 UI)
+- ✅ Build artifact created successfully
+- ✅ No security vulnerabilities found
+- ✅ Deployment completed without errors
+- ✅ Total pipeline duration: 8-12 minutes
 
 #### **Phase 4: Advanced Configuration (15 minutes)**
 

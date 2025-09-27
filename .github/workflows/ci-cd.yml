@@ -32,6 +32,9 @@ jobs:
         path: ~/.m2
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2
+    
+    - name: Make mvnw executable
+      run: chmod +x ./mvnw
 
     - name: 🧪 Run Unit Tests
       run: ./mvnw clean test -Dtest=*Test -DexcludedGroups=integration,ui
