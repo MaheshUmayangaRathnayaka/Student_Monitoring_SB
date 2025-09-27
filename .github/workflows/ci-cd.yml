@@ -1,0 +1,193 @@
+name: Student Monitor CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master ]
+
+env:
+  JAVA_VERSION: '17'
+  MAVEN_OPTS: '-Xmx1024m'
+
+jobs:
+  # Job 1: Unit and Integration Tests
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
+    - name: ☕ Set up JDK ${{ env.JAVA_VERSION }}
+      uses: actions/setup-java@v4
+      with:
+        java-version: ${{ env.JAVA_VERSION }}
+        distribution: 'temurin'
+
+    - name: 📦 Cache Maven dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+
+    - name: 🧪 Run Unit Tests
+      run: ./mvnw clean test -Dtest=*Test -DexcludedGroups=integration,ui
+
+    - name: 🔌 Run Integration Tests (API Tests)
+      run: ./mvnw test -Dtest="**/*ApiTest"
+
+    - name: 🥒 Run BDD Tests
+      run: ./mvnw test -Dtest=CucumberTestRunner
+
+    - name: 📊 Generate Test Reports
+      run: ./mvnw surefire-report:report site:site
+
+    - name: 📤 Upload Test Results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results
+        path: |
+          target/surefire-reports/
+          target/site/
+        retention-days: 30
+
+  # Job 2: UI Tests (Selenium)
+  ui-tests:
+    name: Run UI Tests
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
+    - name: ☕ Set up JDK ${{ env.JAVA_VERSION }}
+      uses: actions/setup-java@v4
+      with:
+        java-version: ${{ env.JAVA_VERSION }}
+        distribution: 'temurin'
+
+    - name: 🌐 Set up Chrome Browser
+      uses: browser-actions/setup-chrome@v1
+
+    - name: 🚀 Start Application
+      run: |
+        ./mvnw spring-boot:run -Dspring.profiles.active=test &
+        sleep 45
+        curl --retry 10 --retry-connrefused http://localhost:8080/actuator/health || exit 1
+
+    - name: 🖥️ Run UI Tests
+      env:
+        CI: true
+      run: ./mvnw test -Dtest="**/*UITest" -Dspring.profiles.active=test
+
+    - name: 📤 Upload UI Test Results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: ui-test-results
+        path: target/surefire-reports/
+        retention-days: 30
+
+  # Job 3: Security and Quality Checks
+  security-quality:
+    name: Security & Quality Checks
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
+    - name: ☕ Set up JDK ${{ env.JAVA_VERSION }}
+      uses: actions/setup-java@v4
+      with:
+        java-version: ${{ env.JAVA_VERSION }}
+        distribution: 'temurin'
+
+    - name: 🔍 Run OWASP Dependency Check
+      run: ./mvnw org.owasp:dependency-check-maven:check
+
+    - name: 📊 Generate Code Coverage
+      run: ./mvnw clean test jacoco:report
+
+    - name: 📤 Upload Security Reports
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: security-reports
+        path: |
+          target/dependency-check-report.html
+          target/site/jacoco/
+        retention-days: 30
+
+  # Job 4: Build Application
+  build:
+    name: Build Application
+    runs-on: ubuntu-latest
+    needs: [test, ui-tests, security-quality]
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
+    - name: ☕ Set up JDK ${{ env.JAVA_VERSION }}
+      uses: actions/setup-java@v4
+      with:
+        java-version: ${{ env.JAVA_VERSION }}
+        distribution: 'temurin'
+
+    - name: 🏗️ Build Application
+      run: ./mvnw clean package -DskipTests
+
+    - name: 📤 Upload Build Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: jar-artifacts
+        path: target/*.jar
+        retention-days: 90
+
+  # Job 5: Deploy to Staging
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/develop'
+    environment: staging
+    
+    steps:
+    - name: 📥 Download Build Artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: jar-artifacts
+
+    - name: 🚀 Deploy to Staging
+      run: |
+        echo "🚀 Deploying to Staging Environment..."
+        echo "📦 Artifact: $(ls -la *.jar)"
+        # Add your staging deployment commands here
+        # Example: scp *.jar user@staging-server:/opt/app/
+
+  # Job 6: Deploy to Production
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    environment: production
+    
+    steps:
+    - name: 📥 Download Build Artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: jar-artifacts
+
+    - name: 🚀 Deploy to Production
+      run: |
+        echo "🚀 Deploying to Production Environment..."
+        echo "📦 Artifact: $(ls -la *.jar)"
+        # Add your production deployment commands here
