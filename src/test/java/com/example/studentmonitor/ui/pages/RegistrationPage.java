@@ -1,11 +1,13 @@
 package com.example.studentmonitor.ui.pages;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class RegistrationPage {
     
@@ -24,13 +26,19 @@ public class RegistrationPage {
     @FindBy(id = "lastName")
     private WebElement lastNameField;
     
-    @FindBy(id = "registerBtn")
+    @FindBy(id = "username")
+    private WebElement usernameField;
+    
+    @FindBy(id = "confirmPassword")
+    private WebElement confirmPasswordField;
+    
+    @FindBy(id = "submitBtn")
     private WebElement registerButton;
     
     @FindBy(id = "successMessage")
     private WebElement successMessage;
     
-    @FindBy(id = "errorMessage")
+    @FindBy(css = ".alert.alert-danger")
     private WebElement errorMessage;
 
     public RegistrationPage(WebDriver driver, WebDriverWait wait) {
@@ -60,13 +68,50 @@ public class RegistrationPage {
         lastNameField.sendKeys(lastName);
     }
 
+    public void enterUsername(String username) {
+        usernameField.clear();
+        usernameField.sendKeys(username);
+    }
+
+    public void enterConfirmPassword(String confirmPassword) {
+        confirmPasswordField.clear();
+        confirmPasswordField.sendKeys(confirmPassword);
+    }
+
     public void clickRegister() {
-        registerButton.click();
+        // Wait for element to be clickable
+        wait.until(ExpectedConditions.elementToBeClickable(registerButton));
+        
+        // Scroll element into view and wait a bit for any animations
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", registerButton);
+        
+        // Wait for element to be visible and stable
+        wait.until(ExpectedConditions.visibilityOf(registerButton));
+        
+        try {
+            // First try normal click
+            registerButton.click();
+            System.out.println("✅ Normal click successful");
+        } catch (Exception e) {
+            // If normal click fails, try JavaScript click
+            System.out.println("⚠️ Normal click failed, trying JavaScript click...");
+            js.executeScript("arguments[0].click();", registerButton);
+            System.out.println("✅ JavaScript click successful");
+        }
     }
 
     public String getSuccessMessage() {
-        wait.until(ExpectedConditions.visibilityOf(successMessage));
-        return successMessage.getText();
+        // Wait for redirect to login page and success message to appear
+        try {
+            wait.until(ExpectedConditions.urlContains("/login"));
+            WebElement successMessageElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector(".alert-success")));
+            return successMessageElement.getText();
+        } catch (Exception e) {
+            System.err.println("⚠ Failed to find success message: " + e.getMessage());
+            throw e;
+        }
     }
 
     public String getErrorMessage() {
