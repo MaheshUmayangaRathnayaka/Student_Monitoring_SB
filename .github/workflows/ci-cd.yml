@@ -74,21 +74,55 @@ jobs:
         java-version: ${{ env.JAVA_VERSION }}
         distribution: 'temurin'
 
+    - name: 📦 Cache Maven dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+
+    - name: Make mvnw executable
+      run: chmod +x ./mvnw
+
     - name: 🌐 Set up Chrome Browser
       uses: browser-actions/setup-chrome@v1
 
     - name: 🚀 Start Application
       run: |
-        ./mvnw spring-boot:run -Dspring.profiles.active=test &
-        sleep 45
-        curl --retry 10 --retry-connrefused http://localhost:8080/actuator/health || exit 1
+        echo "Building application..."
+        ./mvnw clean package -DskipTests -Dspring.profiles.active=test
+        
+        echo "Starting application in background..."
+        nohup java -jar target/*.jar --spring.profiles.active=test --server.port=8080 --management.endpoints.web.exposure.include=health,info > app.log 2>&1 &
+        
+        echo "Waiting for application to start..."
+        for i in {1..60}; do
+          if curl -f http://localhost:8080/actuator/health > /dev/null 2>&1; then
+            echo "Application is running!"
+            break
+          fi
+          if [ $i -eq 60 ]; then
+            echo "Application failed to start within 60 seconds"
+            echo "Application logs:"
+            cat app.log
+            exit 1
+          fi
+          sleep 1
+        done
 
     - name: 🖥️ Run UI Tests
       env:
         CI: true
       run: ./mvnw test -Dtest="**/*UITest" -Dspring.profiles.active=test
 
-    - name: 📤 Upload UI Test Results
+    - name: � Stop Application
+      if: always()
+      run: |
+        echo "Stopping Spring Boot application..."
+        pkill -f "java -jar" || true
+        echo "Application stopped"
+
+    - name: �📤 Upload UI Test Results
       uses: actions/upload-artifact@v4
       if: always()
       with:
@@ -111,6 +145,16 @@ jobs:
       with:
         java-version: ${{ env.JAVA_VERSION }}
         distribution: 'temurin'
+
+    - name: 📦 Cache Maven dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+
+    - name: Make mvnw executable
+      run: chmod +x ./mvnw
 
     - name: 🔍 Run OWASP Dependency Check
       run: ./mvnw org.owasp:dependency-check-maven:check
@@ -143,6 +187,16 @@ jobs:
       with:
         java-version: ${{ env.JAVA_VERSION }}
         distribution: 'temurin'
+
+    - name: 📦 Cache Maven dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+
+    - name: Make mvnw executable
+      run: chmod +x ./mvnw
 
     - name: 🏗️ Build Application
       run: ./mvnw clean package -DskipTests
