@@ -50,6 +50,10 @@ public class SecurityConfig {
                 .requestMatchers(new AntPathRequestMatcher("/css/**")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/js/**")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/images/**")).permitAll()
+                // API endpoints - allow unauthenticated access for testing
+                .requestMatchers(new AntPathRequestMatcher("/api/auth/**")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/api/students/**")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/api/**")).permitAll()
                 // H2 Console - only in development (handled by WebController)
                 .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
                 // Admin pages - only for admins
@@ -85,6 +89,7 @@ public class SecurityConfig {
             )
             .csrf(csrf -> csrf
                 .ignoringRequestMatchers(new AntPathRequestMatcher("/h2-console/**")) // Disable CSRF for H2 console
+                .ignoringRequestMatchers(new AntPathRequestMatcher("/api/**")) // Disable CSRF for API endpoints
             );
         
         return http.build();

@@ -1,14 +1,19 @@
 package com.example.studentmonitor.api;
 
-import io.restassured.response.Response;
-import org.junit.jupiter.api.Test;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.springframework.test.annotation.DirtiesContext;
 
-import static io.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.*;
+import static io.restassured.RestAssured.given;
 
-public class AuthApiTest extends BaseApiTest {
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+class AuthApiTest extends BaseApiTest {
 
     @Test
     @Order(1)
@@ -16,8 +21,10 @@ public class AuthApiTest extends BaseApiTest {
     void testSuccessfulRegistration() {
         String requestBody = """
             {
-                "email": "apitest@example.com",
-                "password": "password123"
+                "email": "test1@example.com",
+                "password": "password123",
+                "firstName": "Test",
+                "lastName": "One"
             }
             """;
 
@@ -29,30 +36,51 @@ public class AuthApiTest extends BaseApiTest {
         .then()
             .statusCode(201)
             .body("id", notNullValue())
-            .body("email", equalTo("apitest@example.com"))
+            .body("email", equalTo("test1@example.com"))
             .body("password", not(equalTo("password123"))) // Should be encrypted
             .time(lessThan(2000L)); // Response time under 2 seconds
     }
 
     @Test
-    @Order(2)
+    @Order(2)  
     @DisplayName("API Test 2: POST /api/auth/signup - Registration with existing email")
     void testRegistrationWithExistingEmail() {
-        String requestBody = """
+        // First, create a user
+        String firstRequestBody = """
             {
-                "email": "apitest@example.com",
-                "password": "password123"
+                "email": "dup@test.com",
+                "password": "password123",
+                "firstName": "Duplicate",
+                "lastName": "User"
             }
             """;
 
         given()
             .contentType("application/json")
-            .body(requestBody)
+            .body(firstRequestBody)
+        .when()
+            .post("/api/auth/signup")
+        .then()
+            .statusCode(201);
+
+        // Then try to create the same user again
+        String secondRequestBody = """
+            {
+                "email": "dup@test.com",
+                "password": "password123",
+                "firstName": "Duplicate",
+                "lastName": "User"
+            }
+            """;
+
+        given()
+            .contentType("application/json")
+            .body(secondRequestBody)
         .when()
             .post("/api/auth/signup")
         .then()
             .statusCode(400)
-            .body("message", containsString("Email already taken"))
+            .body("message", equalTo("Email is already taken!"))
             .body("error", equalTo("Bad Request"));
     }
 
@@ -62,7 +90,9 @@ public class AuthApiTest extends BaseApiTest {
         String requestBody = """
             {
                 "email": "invalid-email",
-                "password": "password123"
+                "password": "password123",
+                "firstName": "Invalid",
+                "lastName": "Email"
             }
             """;
 
@@ -82,7 +112,9 @@ public class AuthApiTest extends BaseApiTest {
         String requestBody = """
             {
                 "email": "weakpass@example.com",
-                "password": "123"
+                "password": "123",
+                "firstName": "Weak",
+                "lastName": "Password"
             }
             """;
 

@@ -37,14 +37,14 @@ public class UserService implements UserDetailsService {
      * Register a new user
      */
     public User registerUser(User user) throws UserRegistrationException {
+        // Check if email already exists first
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new UserRegistrationException("Email is already taken!");
+        }
+        
         // Check if username already exists
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new UserRegistrationException("Username is already taken!");
-        }
-        
-        // Check if email already exists
-        if (userRepository.existsByEmail(user.getEmail())) {
-            throw new UserRegistrationException("Email is already registered!");
         }
         
         // Encode password
