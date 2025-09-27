@@ -71,7 +71,10 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
+import java.io.File;
 import java.time.Duration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class BaseUITest {
@@ -83,31 +86,146 @@ public abstract class BaseUITest {
     private int port;
     
     protected String baseUrl;
+    private String userDataDir;
 
     @BeforeAll
     static void setupClass() {
+        // Disable ChromeDriver logs
+        System.setProperty("webdriver.chrome.silentOutput", "true");
+        Logger.getLogger("org.openqa.selenium").setLevel(Level.WARNING);
+        
         WebDriverManager.chromedriver().setup();
     }
 
     @BeforeEach
     void setUp() {
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless"); // Run in headless mode for CI
-        options.addArguments("--no-sandbox");
-        options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--disable-gpu");
-        options.addArguments("--window-size=1920,1080");
         
-        driver = new ChromeDriver(options);
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        baseUrl = "http://localhost:" + port;
+        // Check if running in CI environment
+        String isCI = System.getProperty("CI", System.getenv("CI"));
+        boolean isCIEnvironment = "true".equals(isCI);
+        
+        if (isCIEnvironment) {
+            // CI Environment Configuration
+            options.addArguments("--headless=new");  // Use new headless mode
+            options.addArguments("--no-sandbox");
+            options.addArguments("--disable-dev-shm-usage");
+            options.addArguments("--disable-gpu");
+            options.addArguments("--disable-extensions");
+            options.addArguments("--disable-web-security");
+            options.addArguments("--disable-features=VizDisplayCompositor");
+            options.addArguments("--disable-background-timer-throttling");
+            options.addArguments("--disable-renderer-backgrounding");
+            options.addArguments("--disable-backgrounding-occluded-windows");
+            options.addArguments("--disable-client-side-phishing-detection");
+            options.addArguments("--disable-default-apps");
+            options.addArguments("--disable-hang-monitor");
+            options.addArguments("--disable-popup-blocking");
+            options.addArguments("--disable-prompt-on-repost");
+            options.addArguments("--disable-sync");
+            options.addArguments("--disable-translate");
+            options.addArguments("--metrics-recording-only");
+            options.addArguments("--no-first-run");
+            options.addArguments("--safebrowsing-disable-auto-update");
+            options.addArguments("--enable-automation");
+            options.addArguments("--password-store=basic");
+            options.addArguments("--use-mock-keychain");
+            options.addArguments("--window-size=1920,1080");
+            options.addArguments("--remote-debugging-port=9222");
+            
+            // CRITICAL FIX: Create unique user data directory for each test session
+            userDataDir = createUniqueUserDataDir();
+            options.addArguments("--user-data-dir=" + userDataDir);
+            
+            // Set additional preferences
+            options.setExperimentalOption("useAutomationExtension", false);
+            options.setExperimentalOption("excludeSwitches", 
+                java.util.Arrays.asList("enable-automation"));
+            
+        } else {
+            // Local Development Configuration
+            options.addArguments("--window-size=1920,1080");
+            options.addArguments("--disable-web-security");
+            options.addArguments("--allow-running-insecure-content");
+            
+            // Create user data dir for local testing too
+            userDataDir = createUniqueUserDataDir();
+            options.addArguments("--user-data-dir=" + userDataDir);
+        }
+        
+        // Common settings
+        options.addArguments("--disable-blink-features=AutomationControlled");
+        options.addArguments("--disable-features=VizDisplayCompositor");
+        
+        try {
+            driver = new ChromeDriver(options);
+            wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+            baseUrl = "http://localhost:" + port;
+            
+            // Set timeouts
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+            driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
+            
+        } catch (Exception e) {
+            System.err.println("Failed to initialize ChromeDriver: " + e.getMessage());
+            cleanupUserDataDir();
+            throw e;
+        }
     }
 
     @AfterEach
     void tearDown() {
         if (driver != null) {
-            driver.quit();
+            try {
+                driver.quit();
+            } catch (Exception e) {
+                System.err.println("Error closing driver: " + e.getMessage());
+            }
         }
+        
+        // Clean up user data directory
+        cleanupUserDataDir();
+    }
+    
+    private String createUniqueUserDataDir() {
+        String tempDir = System.getProperty("java.io.tmpdir");
+        String uniqueDir = tempDir + File.separator + 
+                          "chrome-user-data-" + 
+                          System.currentTimeMillis() + "-" + 
+                          Thread.currentThread().getId() + "-" +
+                          (int)(Math.random() * 10000);
+        
+        File dir = new File(uniqueDir);
+        dir.mkdirs();
+        
+        System.out.println("Created Chrome user data directory: " + uniqueDir);
+        return uniqueDir;
+    }
+    
+    private void cleanupUserDataDir() {
+        if (userDataDir != null) {
+            try {
+                File dir = new File(userDataDir);
+                if (dir.exists()) {
+                    deleteDirectory(dir);
+                    System.out.println("Cleaned up Chrome user data directory: " + userDataDir);
+                }
+            } catch (Exception e) {
+                System.err.println("Failed to cleanup user data directory: " + e.getMessage());
+            }
+        }
+    }
+    
+    private void deleteDirectory(File directory) {
+        if (directory.isDirectory()) {
+            File[] files = directory.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    deleteDirectory(file);
+                }
+            }
+        }
+        directory.delete();
     }
 }
 ```
@@ -806,7 +924,24 @@ jobs:
     - name: 🖥️ Run UI Tests
       env:
         CI: true
-      run: ./mvnw test -Dtest="**/*UITest" -Dspring.profiles.active=test
+        CHROME_BIN: /usr/bin/google-chrome
+        DISPLAY: :99.0
+      run: |
+        # Start Xvfb for headless display
+        sudo Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
+        sleep 3
+        
+        # Create unique temp directory for Chrome user data
+        export CHROME_USER_DATA_DIR=$(mktemp -d)
+        
+        # Run UI tests with proper Chrome configuration
+        ./mvnw test -Dtest="**/*UITest" \
+          -Dspring.profiles.active=ci \
+          -Dwebdriver.chrome.args="--user-data-dir=$CHROME_USER_DATA_DIR" \
+          -Djava.awt.headless=true
+        
+        # Cleanup
+        rm -rf "$CHROME_USER_DATA_DIR"
 
     - name: 📤 Upload UI Test Results
       uses: actions/upload-artifact@v4
@@ -941,6 +1076,16 @@ logging.level.org.hibernate=WARN
 
 # Test-specific settings
 spring.test.mockmvc.print=none
+
+# Selenium CI Configuration
+selenium.headless=true
+selenium.timeout=60
+selenium.page-load-timeout=30
+selenium.implicit-wait=10
+
+# Chrome driver settings for CI
+webdriver.chrome.driver.silent=true
+webdriver.chrome.verboseLogging=false
 ```
 
 ### **Step-by-Step CI/CD Setup Procedure:**
