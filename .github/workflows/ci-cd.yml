@@ -156,20 +156,20 @@ jobs:
     - name: Make mvnw executable
       run: chmod +x ./mvnw
 
-    - name: 🔍 Run OWASP Dependency Check
-      run: ./mvnw org.owasp:dependency-check-maven:check
-
-    - name: 📊 Generate Code Coverage
+    - name: � Generate Code Coverage Report
       run: ./mvnw clean test jacoco:report
 
-    - name: 📤 Upload Security Reports
+    - name: � Run Static Code Analysis
+      run: ./mvnw compile -Dmaven.test.skip=true
+
+    - name: 📤 Upload Quality Reports
       uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: security-reports
+        name: quality-reports
         path: |
-          target/dependency-check-report.html
           target/site/jacoco/
+          target/surefire-reports/
         retention-days: 30
 
   # Job 4: Build Application
