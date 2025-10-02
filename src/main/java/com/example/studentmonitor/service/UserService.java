@@ -27,7 +27,8 @@ public class UserService implements UserDetailsService {
     
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
-        User user = userRepository.findByUsernameOrEmail(usernameOrEmail)
+        // BUG INTRODUCED: Case-sensitive email login - convert to lowercase for lookup
+        User user = userRepository.findByUsernameOrEmail(usernameOrEmail.toLowerCase())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username or email: " + usernameOrEmail));
         
         return user;

@@ -96,4 +96,21 @@ public class PerformanceServiceImpl implements PerformanceService {
         performance.setRemarks(dto.getRemarks());
         return performance;
     }
+    
+    // BUG INTRODUCED: Null Pointer Exception
+    public Double calculateAverageScore(Long studentId) {
+        List<PerformanceRecord> performances = performanceRepository.findByStudentId(studentId);
+        
+        if (performances.isEmpty()) {
+            // BUG: This will cause NPE when trying to access .doubleValue()
+            Double average = null;
+            System.out.println("Calculating average for student with no records...");
+            return average.doubleValue(); // CRASH: NullPointerException here!
+        }
+        
+        return performances.stream()
+                .mapToDouble(PerformanceRecord::getScore)
+                .average()
+                .orElse(0.0);
+    }
 }

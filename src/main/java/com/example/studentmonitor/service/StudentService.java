@@ -15,4 +15,7 @@ public interface StudentService {
     StudentDTO updateStudent(Long id, StudentDTO dto);
     
     void deleteStudent(Long id);
+    
+    // BUG: Vulnerable search method (SQL Injection risk)
+    List<StudentDTO> searchStudentsVulnerable(String query);
 }

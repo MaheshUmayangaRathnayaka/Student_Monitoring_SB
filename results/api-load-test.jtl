@@ -1,0 +1,121 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1759150623618,233,Get All Students,200,,API Load Test Users 1-1,text,true,,560,129,3,3,http://localhost:8080/api/students,228,0,52
+1759150623892,10,Get All Students,200,,API Load Test Users 1-2,text,true,,560,129,4,4,http://localhost:8080/api/students,9,0,1
+1759150624390,15,Get All Students,200,,API Load Test Users 1-3,text,true,,560,129,5,5,http://localhost:8080/api/students,13,0,2
+1759150624886,13,Get All Students,200,,API Load Test Users 1-4,text,true,,560,129,6,6,http://localhost:8080/api/students,12,0,2
+1759150624903,52,Create New User,400,,API Load Test Users 1-2,text,false,Test failed: code expected to match /201/,378,252,6,6,http://localhost:8080/api/auth/signup,50,0,0
+1759150624859,96,Create New User,400,,API Load Test Users 1-1,text,false,Test failed: code expected to match /201/,378,252,6,6,http://localhost:8080/api/auth/signup,94,0,0
+1759150625387,16,Get All Students,200,,API Load Test Users 1-5,text,true,,560,129,7,7,http://localhost:8080/api/students,14,0,2
+1759150625406,9,Create New User,400,,API Load Test Users 1-3,text,false,Test failed: code expected to match /201/,378,252,7,7,http://localhost:8080/api/auth/signup,8,0,0
+1759150625882,22,Get All Students,200,,API Load Test Users 1-6,text,true,,560,129,8,8,http://localhost:8080/api/students,19,0,4
+1759150625901,13,Create New User,400,,API Load Test Users 1-4,text,false,Test failed: code expected to match /201/,378,252,8,8,http://localhost:8080/api/auth/signup,11,0,0
+1759150625959,25,Get All Students,200,,API Load Test Users 1-2,text,true,,560,129,8,8,http://localhost:8080/api/students,23,0,3
+1759150625959,34,Get All Students,200,,API Load Test Users 1-1,text,true,,560,129,8,8,http://localhost:8080/api/students,32,0,3
+1759150626385,11,Get All Students,200,,API Load Test Users 1-7,text,true,,560,129,9,9,http://localhost:8080/api/students,10,0,2
+1759150626404,6,Create New User,400,,API Load Test Users 1-5,text,false,Test failed: code expected to match /201/,378,252,9,9,http://localhost:8080/api/auth/signup,5,0,0
+1759150626417,10,Get All Students,200,,API Load Test Users 1-3,text,true,,560,129,9,9,http://localhost:8080/api/students,9,0,2
+1759150626879,28,Get All Students,200,,API Load Test Users 1-8,text,true,,560,129,10,10,http://localhost:8080/api/students,27,0,3
+1759150626907,17,Create New User,400,,API Load Test Users 1-6,text,false,Test failed: code expected to match /201/,378,252,10,10,http://localhost:8080/api/auth/signup,13,0,0
+1759150626917,29,Get All Students,200,,API Load Test Users 1-4,text,true,,560,129,10,10,http://localhost:8080/api/students,26,0,4
+1759150626987,6,Create New User,400,,API Load Test Users 1-2,text,false,Test failed: code expected to match /201/,378,252,10,10,http://localhost:8080/api/auth/signup,6,0,0
+1759150626997,8,Create New User,400,,API Load Test Users 1-1,text,false,Test failed: code expected to match /201/,378,252,10,10,http://localhost:8080/api/auth/signup,7,0,0
+1759150627386,26,Get All Students,200,,API Load Test Users 1-9,text,true,,560,129,10,10,http://localhost:8080/api/students,24,0,3
+1759150627399,19,Create New User,400,,API Load Test Users 1-7,text,false,Test failed: code expected to match /201/,378,252,10,10,http://localhost:8080/api/auth/signup,14,0,0
+1759150627415,28,Get All Students,200,,API Load Test Users 1-5,text,true,,560,129,10,10,http://localhost:8080/api/students,26,0,5
+1759150627430,20,Create New User,400,,API Load Test Users 1-3,text,false,Test failed: code expected to match /201/,378,252,10,10,http://localhost:8080/api/auth/signup,16,0,0
+1759150627898,29,Get All Students,200,,API Load Test Users 1-10,text,true,,560,129,10,10,http://localhost:8080/api/students,27,0,4
+1759150627912,15,Create New User,400,,API Load Test Users 1-8,text,false,Test failed: code expected to match /201/,378,252,10,10,http://localhost:8080/api/auth/signup,13,0,0
+1759150627927,26,Get All Students,200,,API Load Test Users 1-6,text,true,,560,129,10,10,http://localhost:8080/api/students,24,0,4
+1759150627958,16,Create New User,400,,API Load Test Users 1-4,text,false,Test failed: code expected to match /201/,378,252,10,10,http://localhost:8080/api/auth/signup,13,0,0
+1759150628005,26,Get All Students,200,,API Load Test Users 1-2,text,true,,560,129,10,10,http://localhost:8080/api/students,24,0,3
+1759150628021,22,Get All Students,200,,API Load Test Users 1-1,text,true,,560,129,10,10,http://localhost:8080/api/students,21,0,3
+1759150628424,14,Create New User,400,,API Load Test Users 1-9,text,false,Test failed: code expected to match /201/,378,252,10,10,http://localhost:8080/api/auth/signup,11,0,0
+1759150628424,22,Get All Students,200,,API Load Test Users 1-7,text,true,,560,129,10,10,http://localhost:8080/api/students,20,0,3
+1759150628456,14,Create New User,400,,API Load Test Users 1-5,text,false,Test failed: code expected to match /201/,378,252,10,10,http://localhost:8080/api/auth/signup,10,0,0
+1759150628456,26,Get All Students,200,,API Load Test Users 1-3,text,true,,560,129,10,10,http://localhost:8080/api/students,24,0,3
+1759150628941,15,Create New User,400,,API Load Test Users 1-10,text,false,Test failed: code expected to match /201/,378,253,10,10,http://localhost:8080/api/auth/signup,12,0,0
+1759150628941,22,Get All Students,200,,API Load Test Users 1-8,text,true,,560,129,10,10,http://localhost:8080/api/students,20,0,2
+1759150628956,14,Create New User,400,,API Load Test Users 1-6,text,false,Test failed: code expected to match /201/,378,252,10,10,http://localhost:8080/api/auth/signup,12,0,0
+1759150628986,24,Get All Students,200,,API Load Test Users 1-4,text,true,,560,129,10,10,http://localhost:8080/api/students,22,0,3
+1759150629047,17,Create New User,400,,API Load Test Users 1-2,text,false,Test failed: code expected to match /201/,378,252,10,10,http://localhost:8080/api/auth/signup,14,0,0
+1759150629047,17,Create New User,400,,API Load Test Users 1-1,text,false,Test failed: code expected to match /201/,378,252,10,10,http://localhost:8080/api/auth/signup,15,0,0
+1759150629453,17,Create New User,400,,API Load Test Users 1-7,text,false,Test failed: code expected to match /201/,378,252,8,8,http://localhost:8080/api/auth/signup,13,0,0
+1759150629453,23,Get All Students,200,,API Load Test Users 1-9,text,true,,560,129,8,8,http://localhost:8080/api/students,21,0,4
+1759150629485,10,Create New User,400,,API Load Test Users 1-3,text,false,Test failed: code expected to match /201/,378,252,8,8,http://localhost:8080/api/auth/signup,9,0,0
+1759150629485,14,Get All Students,200,,API Load Test Users 1-5,text,true,,560,129,7,7,http://localhost:8080/api/students,13,0,3
+1759150629969,14,Create New User,400,,API Load Test Users 1-8,text,false,Test failed: code expected to match /201/,378,252,7,7,http://localhost:8080/api/auth/signup,11,0,0
+1759150629969,21,Get All Students,200,,API Load Test Users 1-10,text,true,,560,129,7,7,http://localhost:8080/api/students,19,0,2
+1759150629985,23,Get All Students,200,,API Load Test Users 1-6,text,true,,560,129,7,7,http://localhost:8080/api/students,22,0,3
+1759150630015,13,Create New User,400,,API Load Test Users 1-4,text,false,Test failed: code expected to match /201/,378,252,7,7,http://localhost:8080/api/auth/signup,11,0,0
+1759150630486,22,Create New User,400,,API Load Test Users 1-9,text,false,Test failed: code expected to match /201/,378,252,6,6,http://localhost:8080/api/auth/signup,19,0,0
+1759150630484,34,Get All Students,200,,API Load Test Users 1-7,text,true,,560,129,6,6,http://localhost:8080/api/students,30,0,4
+1759150630514,10,Create New User,400,,API Load Test Users 1-5,text,false,Test failed: code expected to match /201/,378,252,6,6,http://localhost:8080/api/auth/signup,8,0,0
+1759150631000,13,Create New User,400,,API Load Test Users 1-10,text,false,Test failed: code expected to match /201/,378,253,5,5,http://localhost:8080/api/auth/signup,11,0,0
+1759150631000,32,Get All Students,200,,API Load Test Users 1-8,text,true,,560,129,5,5,http://localhost:8080/api/students,30,0,3
+1759150631015,27,Create New User,400,,API Load Test Users 1-6,text,false,Test failed: code expected to match /201/,378,252,5,5,http://localhost:8080/api/auth/signup,25,0,0
+1759150631512,8,Get All Students,200,,API Load Test Users 1-9,text,true,,560,129,4,4,http://localhost:8080/api/students,7,0,1
+1759150631528,4,Create New User,400,,API Load Test Users 1-7,text,false,Test failed: code expected to match /201/,378,252,4,4,http://localhost:8080/api/auth/signup,4,0,0
+1759150632027,21,Get All Students,200,,API Load Test Users 1-10,text,true,,560,129,3,3,http://localhost:8080/api/students,19,0,2
+1759150632042,11,Create New User,400,,API Load Test Users 1-8,text,false,Test failed: code expected to match /201/,378,252,3,3,http://localhost:8080/api/auth/signup,10,0,0
+1759150632528,8,Create New User,400,,API Load Test Users 1-9,text,false,Test failed: code expected to match /201/,378,252,2,2,http://localhost:8080/api/auth/signup,6,0,0
+1759150633059,13,Create New User,400,,API Load Test Users 1-10,text,false,Test failed: code expected to match /201/,378,253,1,1,http://localhost:8080/api/auth/signup,12,0,0
+1759233431853,110,Get All Students,200,,API Load Test Users 1-1,text,true,,64273,129,3,3,http://localhost:8080/api/students,98,0,62
+1759233432168,21,Get All Students,200,,API Load Test Users 1-2,text,true,,64273,129,4,4,http://localhost:8080/api/students,19,0,2
+1759233432670,8,Get All Students,200,,API Load Test Users 1-3,text,true,,64273,129,5,5,http://localhost:8080/api/students,8,0,1
+1759233432988,5,Create New User,400,,API Load Test Users 1-1,text,false,Test failed: code expected to match /201/,378,252,5,5,http://localhost:8080/api/auth/signup,5,0,0
+1759233433165,24,Get All Students,200,,API Load Test Users 1-4,text,true,,64273,129,6,6,http://localhost:8080/api/students,20,0,2
+1759233433191,4,Create New User,400,,API Load Test Users 1-2,text,false,Test failed: code expected to match /201/,378,252,6,6,http://localhost:8080/api/auth/signup,4,0,0
+1759233433682,7,Create New User,400,,API Load Test Users 1-3,text,false,Test failed: code expected to match /201/,378,252,7,7,http://localhost:8080/api/auth/signup,7,0,0
+1759233433669,24,Get All Students,200,,API Load Test Users 1-5,text,true,,64273,129,7,7,http://localhost:8080/api/students,21,0,3
+1759233433996,24,Get All Students,200,,API Load Test Users 1-1,text,true,,64273,129,7,7,http://localhost:8080/api/students,21,0,2
+1759233434159,11,Get All Students,200,,API Load Test Users 1-6,text,true,,64273,129,8,8,http://localhost:8080/api/students,10,0,2
+1759233434193,2,Create New User,400,,API Load Test Users 1-4,text,false,Test failed: code expected to match /201/,378,252,8,8,http://localhost:8080/api/auth/signup,2,0,0
+1759233434197,13,Get All Students,200,,API Load Test Users 1-2,text,true,,64273,129,8,8,http://localhost:8080/api/students,11,0,1
+1759233434669,22,Get All Students,200,,API Load Test Users 1-7,text,true,,64273,129,9,9,http://localhost:8080/api/students,20,0,2
+1759233434695,7,Create New User,400,,API Load Test Users 1-5,text,false,Test failed: code expected to match /201/,378,252,9,9,http://localhost:8080/api/auth/signup,6,0,0
+1759233434693,26,Get All Students,200,,API Load Test Users 1-3,text,true,,64273,129,9,9,http://localhost:8080/api/students,22,0,2
+1759233435021,2,Create New User,400,,API Load Test Users 1-1,text,false,Test failed: code expected to match /201/,378,252,9,9,http://localhost:8080/api/auth/signup,2,0,0
+1759233435155,14,Get All Students,200,,API Load Test Users 1-8,text,true,,64273,129,10,10,http://localhost:8080/api/students,12,0,1
+1759233435171,3,Create New User,400,,API Load Test Users 1-6,text,false,Test failed: code expected to match /201/,378,252,10,10,http://localhost:8080/api/auth/signup,3,0,0
+1759233435197,17,Get All Students,200,,API Load Test Users 1-4,text,true,,64273,129,10,10,http://localhost:8080/api/students,14,0,3
+1759233435213,4,Create New User,400,,API Load Test Users 1-2,text,false,Test failed: code expected to match /201/,378,252,10,10,http://localhost:8080/api/auth/signup,4,0,0
+1759233435665,13,Get All Students,200,,API Load Test Users 1-9,text,true,,64273,129,10,10,http://localhost:8080/api/students,12,0,1
+1759233435693,3,Create New User,400,,API Load Test Users 1-7,text,false,Test failed: code expected to match /201/,378,252,10,10,http://localhost:8080/api/auth/signup,3,0,0
+1759233435704,14,Get All Students,200,,API Load Test Users 1-5,text,true,,64273,129,10,10,http://localhost:8080/api/students,13,0,1
+1759233435721,3,Create New User,400,,API Load Test Users 1-3,text,false,Test failed: code expected to match /201/,378,252,10,10,http://localhost:8080/api/auth/signup,3,0,0
+1759233436025,22,Get All Students,200,,API Load Test Users 1-1,text,true,,64273,129,10,10,http://localhost:8080/api/students,19,0,2
+1759233436177,8,Create New User,400,,API Load Test Users 1-8,text,false,Test failed: code expected to match /201/,378,252,10,10,http://localhost:8080/api/auth/signup,6,0,0
+1759233436164,27,Get All Students,200,,API Load Test Users 1-10,text,true,,64273,129,10,10,http://localhost:8080/api/students,26,0,4
+1759233436177,18,Get All Students,200,,API Load Test Users 1-6,text,true,,64273,129,10,10,http://localhost:8080/api/students,17,0,3
+1759233436225,4,Create New User,400,,API Load Test Users 1-4,text,false,Test failed: code expected to match /201/,378,252,10,10,http://localhost:8080/api/auth/signup,3,0,0
+1759233436225,13,Get All Students,200,,API Load Test Users 1-2,text,true,,64273,129,10,10,http://localhost:8080/api/students,11,0,2
+1759233436680,3,Create New User,400,,API Load Test Users 1-9,text,false,Test failed: code expected to match /201/,378,252,10,10,http://localhost:8080/api/auth/signup,3,0,0
+1759233436727,6,Create New User,400,,API Load Test Users 1-5,text,false,Test failed: code expected to match /201/,378,252,10,10,http://localhost:8080/api/auth/signup,5,0,0
+1759233436711,27,Get All Students,200,,API Load Test Users 1-7,text,true,,64273,129,10,10,http://localhost:8080/api/students,22,0,2
+1759233436727,25,Get All Students,200,,API Load Test Users 1-3,text,true,,64273,129,10,10,http://localhost:8080/api/students,23,0,3
+1759233437053,2,Create New User,400,,API Load Test Users 1-1,text,false,Test failed: code expected to match /201/,378,252,10,10,http://localhost:8080/api/auth/signup,2,0,0
+1759233437194,3,Create New User,400,,API Load Test Users 1-10,text,false,Test failed: code expected to match /201/,378,253,9,9,http://localhost:8080/api/auth/signup,3,0,0
+1759233437194,16,Get All Students,200,,API Load Test Users 1-8,text,true,,64273,129,9,9,http://localhost:8080/api/students,14,0,1
+1759233437209,6,Create New User,400,,API Load Test Users 1-6,text,false,Test failed: code expected to match /201/,378,252,9,9,http://localhost:8080/api/auth/signup,5,0,0
+1759233437240,4,Create New User,400,,API Load Test Users 1-2,text,false,Test failed: code expected to match /201/,378,252,9,9,http://localhost:8080/api/auth/signup,4,0,0
+1759233437240,23,Get All Students,200,,API Load Test Users 1-4,text,true,,64273,129,8,8,http://localhost:8080/api/students,20,0,2
+1759233437691,23,Get All Students,200,,API Load Test Users 1-9,text,true,,64273,129,8,8,http://localhost:8080/api/students,20,0,2
+1759233437754,8,Create New User,400,,API Load Test Users 1-7,text,false,Test failed: code expected to match /201/,378,252,8,8,http://localhost:8080/api/auth/signup,7,0,0
+1759233437756,7,Create New User,400,,API Load Test Users 1-3,text,false,Test failed: code expected to match /201/,378,252,8,8,http://localhost:8080/api/auth/signup,5,0,0
+1759233437738,28,Get All Students,200,,API Load Test Users 1-5,text,true,,64273,129,7,7,http://localhost:8080/api/students,23,0,3
+1759233438208,11,Get All Students,200,,API Load Test Users 1-10,text,true,,64273,129,7,7,http://localhost:8080/api/students,10,0,1
+1759233438224,8,Create New User,400,,API Load Test Users 1-8,text,false,Test failed: code expected to match /201/,378,252,7,7,http://localhost:8080/api/auth/signup,2,0,0
+1759233438224,15,Get All Students,200,,API Load Test Users 1-6,text,true,,64273,129,7,7,http://localhost:8080/api/students,14,0,1
+1759233438271,2,Create New User,400,,API Load Test Users 1-4,text,false,Test failed: code expected to match /201/,378,252,7,7,http://localhost:8080/api/auth/signup,2,0,0
+1759233438722,5,Create New User,400,,API Load Test Users 1-9,text,false,Test failed: code expected to match /201/,378,252,6,6,http://localhost:8080/api/auth/signup,4,0,0
+1759233438769,3,Create New User,400,,API Load Test Users 1-5,text,false,Test failed: code expected to match /201/,378,252,6,6,http://localhost:8080/api/auth/signup,3,0,0
+1759233438769,13,Get All Students,200,,API Load Test Users 1-7,text,true,,64273,129,5,5,http://localhost:8080/api/students,12,0,1
+1759233439221,6,Create New User,400,,API Load Test Users 1-10,text,false,Test failed: code expected to match /201/,378,253,5,5,http://localhost:8080/api/auth/signup,5,0,0
+1759233439252,5,Create New User,400,,API Load Test Users 1-6,text,false,Test failed: code expected to match /201/,378,252,5,5,http://localhost:8080/api/auth/signup,5,0,0
+1759233439236,24,Get All Students,200,,API Load Test Users 1-8,text,true,,64273,129,4,4,http://localhost:8080/api/students,21,0,3
+1759233439736,23,Get All Students,200,,API Load Test Users 1-9,text,true,,64273,129,4,4,http://localhost:8080/api/students,20,0,2
+1759233439798,5,Create New User,400,,API Load Test Users 1-7,text,false,Test failed: code expected to match /201/,378,252,4,4,http://localhost:8080/api/auth/signup,5,0,0
+1759233440234,15,Get All Students,200,,API Load Test Users 1-10,text,true,,64273,129,3,3,http://localhost:8080/api/students,14,0,1
+1759233440265,3,Create New User,400,,API Load Test Users 1-8,text,false,Test failed: code expected to match /201/,378,252,3,3,http://localhost:8080/api/auth/signup,2,0,0
+1759233440764,5,Create New User,400,,API Load Test Users 1-9,text,false,Test failed: code expected to match /201/,378,252,2,2,http://localhost:8080/api/auth/signup,4,0,0
+1759233441264,3,Create New User,400,,API Load Test Users 1-10,text,false,Test failed: code expected to match /201/,378,253,1,1,http://localhost:8080/api/auth/signup,3,0,0

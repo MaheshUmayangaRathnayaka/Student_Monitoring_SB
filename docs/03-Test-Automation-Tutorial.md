@@ -1493,11 +1493,663 @@ export CI=true
 
 ## Screenshots to Take
 
-1. **Selenium Tests Running:** Browser automation in action
-2. **Test Reports:** Surefire HTML reports
-3. **API Test Results:** REST Assured output
-4. **GitHub Actions:** Pipeline execution
-5. **Test Coverage:** JaCoCo coverage report
+### 📸 **Complete Documentation Screenshot Guide**
+
+This section provides detailed guidance on capturing high-quality screenshots that demonstrate your test automation capabilities and CI/CD pipeline effectiveness.
+
+---
+
+### **1. 🖥️ Selenium Tests Running - Browser Automation in Action**
+
+**What to Capture:**
+- Chrome browser window with your application loaded
+- Developer Tools console showing Selenium WebDriver logs
+- Terminal/Command Prompt with test execution output
+- Multiple browser tabs showing different test scenarios
+
+**Step-by-Step Screenshot Process:**
+```bash
+# 1. Start your application
+.\mvnw spring-boot:run
+
+# 2. Open a second terminal and run UI tests with verbose output
+.\mvnw test -Dtest=LoginUITest -X
+```
+
+**Key Elements to Include in Screenshot:**
+- ✅ **Browser Address Bar**: Showing `http://localhost:8080/login`
+- ✅ **Application UI**: Login form with filled fields
+- ✅ **Console Output**: 
+  ```
+  🔍 Running Home Page Navigation Test
+  ✅ Browser started - Testing URL: http://localhost:8080
+  ✅ Navigation test passed - Current URL: http://localhost:8080/
+  ```
+- ✅ **WebDriver Activity**: Chrome DevTools Network tab showing HTTP requests
+- ✅ **Test Status**: Terminal showing "Tests run: 3, Failures: 0, Errors: 0"
+
+**Screenshot Tips:**
+- Use **dual monitor setup** or **split screen** to show both browser and terminal
+- Capture **full desktop** to show complete testing environment
+- **Timing**: Take screenshot during test execution, not after completion
+- **Annotation**: Circle key elements like "Selenium automated input" in form fields
+
+---
+
+### **2. 📊 Test Reports - Surefire HTML Reports**
+
+**What to Capture:**
+- Complete Surefire test report dashboard
+- Individual test method results
+- Test execution timeline
+- Failed test details (if any)
+
+**How to Generate and Access:**
+```bash
+# Generate comprehensive test reports
+.\mvnw clean test surefire-report:report site:site
+
+# Open the generated report
+Invoke-Item target\site\surefire-report.html
+```
+
+**Key Elements to Include in Screenshot:**
+- ✅ **Summary Dashboard**: 
+  ```
+  Tests: 24    Errors: 0    Failures: 0    Skipped: 0    Success Rate: 100%
+  ```
+- ✅ **Test Categories**:
+  - Unit Tests (8 tests)
+  - Integration Tests (6 tests) 
+  - BDD Tests (7 scenarios)
+  - UI Tests (3 tests)
+- ✅ **Execution Timeline**: Bar chart showing test duration
+- ✅ **Package Breakdown**: Tests organized by package structure
+- ✅ **Individual Test Details**: Expand a test class to show method-level results
+
+**Screenshot Composition:**
+- **Primary**: Full browser window showing report dashboard
+- **Secondary**: Zoomed view of specific test class results
+- **Tertiary**: Test execution time graphs and statistics
+
+---
+
+### **3. 🔌 API Test Results - REST Assured Output**
+
+**What to Capture:**
+- REST Assured console output with HTTP request/response details
+- API endpoint testing results
+- JSON response validation
+- Performance metrics
+
+**How to Run with Detailed Output:**
+```bash
+# Run API tests with verbose REST Assured logging
+.\mvnw test -Dtest=AuthApiTest -Drest-assured.enableLoggingOfRequestAndResponseIfValidationFails=true -X
+```
+
+**Key Elements to Include in Screenshot:**
+- ✅ **HTTP Request Details**:
+  ```
+  Request method: POST
+  Request URI: http://localhost:8080/api/auth/signup
+  Request body: {"email":"apitest@example.com","password":"password123"}
+  ```
+- ✅ **HTTP Response Validation**:
+  ```
+  Response status: 201 CREATED
+  Response time: 1247ms
+  Response body matches: {"id":1,"email":"apitest@example.com"}
+  ```
+- ✅ **Test Assertions**:
+  ```
+  ✅ API Test 1: POST /api/auth/signup - Successful registration
+  ✅ API Test 2: POST /api/auth/signup - Registration with existing email  
+  ✅ API Test 3: POST /api/auth/signup - Invalid email format
+  ```
+- ✅ **Performance Metrics**: Response times and assertion details
+
+---
+
+## **🔧 Step-by-Step Postman API Testing Guide**
+
+### **📋 Prerequisites Setup**
+
+**Step 1: Install and Setup Postman**
+1. Download Postman from https://www.postman.com/downloads/
+2. Install and create a free account
+3. Launch Postman application
+
+**Step 2: Start Your Spring Boot Application**
+```powershell
+# Navigate to your project directory
+cd c:\Users\usr\Desktop\Smon\Student_Monitoring_SB
+
+# Start the application
+.\mvnw spring-boot:run
+```
+**Expected Output:**
+```
+Started StudentMonitorApplication in 8.521 seconds (JVM running for 9.156)
+Application is running on: http://localhost:8080
+```
+
+**Step 3: Verify Application is Running**
+- Open browser and go to `http://localhost:8080`
+- Or check health endpoint: `http://localhost:8080/actuator/health`
+
+---
+
+### **🚀 API Test 1: Successful User Registration**
+
+**Step 4: Create New Request in Postman**
+1. Click **"New"** button in Postman
+2. Select **"HTTP Request"**
+3. Name it: `Auth API - Successful Registration`
+
+**Step 5: Configure Request Method and URL**
+1. **Method**: Select `POST` from dropdown
+2. **URL**: Enter `http://localhost:8080/api/auth/signup`
+3. **Description**: Add "Test successful user registration with valid email and password"
+
+**Step 6: Set Request Headers**
+1. Click on **"Headers"** tab
+2. Add header:
+   - **Key**: `Content-Type`
+   - **Value**: `application/json`
+
+**Step 7: Configure Request Body**
+1. Click on **"Body"** tab
+2. Select **"raw"** radio button
+3. Select **"JSON"** from dropdown (right side)
+4. Enter the following JSON:
+```json
+{
+    "email": "postman.test@example.com",
+    "password": "password123"
+}
+```
+
+**Step 8: Send Request and Verify Response**
+1. Click **"Send"** button
+2. **Expected Response**:
+   - **Status**: `201 Created`
+   - **Response Time**: < 2000ms
+   - **Response Body**:
+   ```json
+   {
+       "id": 1,
+       "email": "postman.test@example.com",
+       "password": "[ENCRYPTED_PASSWORD]",
+       "roles": ["USER"]
+   }
+   ```
+
+**Step 9: Save Request**
+1. Click **"Save"** button
+2. Create new collection: `Student Monitor API Tests`
+3. Save request to collection
+
+---
+
+### **❌ API Test 2: Registration with Existing Email**
+
+**Step 10: Duplicate Previous Request**
+1. Right-click on saved request
+2. Select **"Duplicate"**
+3. Rename to: `Auth API - Existing Email Error`
+
+**Step 11: Use Same Request Configuration**
+- **Method**: `POST`
+- **URL**: `http://localhost:8080/api/auth/signup`
+- **Headers**: `Content-Type: application/json`
+- **Body**: Use the same JSON as Step 7
+
+**Step 12: Send Request and Verify Error Response**
+1. Click **"Send"** button
+2. **Expected Response**:
+   - **Status**: `400 Bad Request`
+   - **Response Time**: < 1000ms
+   - **Response Body**:
+   ```json
+   {
+       "message": "Email already taken",
+       "error": "Bad Request",
+       "timestamp": "2025-09-28T10:30:45.123Z",
+       "path": "/api/auth/signup"
+   }
+   ```
+
+---
+
+### **📧 API Test 3: Invalid Email Format**
+
+**Step 13: Create New Request for Invalid Email**
+1. Duplicate the first request
+2. Rename to: `Auth API - Invalid Email Format`
+
+**Step 14: Configure Request with Invalid Email**
+1. **Method**: `POST`
+2. **URL**: `http://localhost:8080/api/auth/signup`
+3. **Headers**: `Content-Type: application/json`
+4. **Body**: 
+```json
+{
+    "email": "invalid-email-format",
+    "password": "password123"
+}
+```
+
+**Step 15: Send Request and Verify Validation Error**
+1. Click **"Send"** button
+2. **Expected Response**:
+   - **Status**: `400 Bad Request`
+   - **Response Body**:
+   ```json
+   {
+       "message": "Please provide a valid email address",
+       "error": "Bad Request",
+       "timestamp": "2025-09-28T10:35:22.456Z",
+       "path": "/api/auth/signup"
+   }
+   ```
+
+---
+
+### **🔐 API Test 4: Weak Password Validation**
+
+**Step 16: Create New Request for Weak Password**
+1. Duplicate the first request
+2. Rename to: `Auth API - Weak Password Error`
+
+**Step 17: Configure Request with Weak Password**
+1. **Body**: 
+```json
+{
+    "email": "weakpass.test@example.com",
+    "password": "123"
+}
+```
+
+**Step 18: Send Request and Verify Password Validation**
+1. Click **"Send"** button
+2. **Expected Response**:
+   - **Status**: `400 Bad Request`
+   - **Response Body**:
+   ```json
+   {
+       "message": "Password must be at least 6 characters long",
+       "error": "Bad Request",
+       "timestamp": "2025-09-28T10:37:15.789Z",
+       "path": "/api/auth/signup"
+   }
+   ```
+
+---
+
+### **📊 Advanced Postman Testing Features**
+
+**Step 19: Add Automated Tests to Requests**
+1. Select your first request (`Auth API - Successful Registration`)
+2. Click on **"Tests"** tab
+3. Add the following JavaScript test code:
+```javascript
+pm.test("Status code is 201", function () {
+    pm.response.to.have.status(201);
+});
+
+pm.test("Response time is less than 2000ms", function () {
+    pm.expect(pm.response.responseTime).to.be.below(2000);
+});
+
+pm.test("Response has user ID", function () {
+    var jsonData = pm.response.json();
+    pm.expect(jsonData.id).to.be.a('number');
+});
+
+pm.test("Email matches request", function () {
+    var jsonData = pm.response.json();
+    pm.expect(jsonData.email).to.eql("postman.test@example.com");
+});
+
+pm.test("Password is encrypted", function () {
+    var jsonData = pm.response.json();
+    pm.expect(jsonData.password).to.not.eql("password123");
+});
+```
+
+**Step 20: Create Environment Variables**
+1. Click on **"Environments"** in left sidebar
+2. Click **"Create Environment"**
+3. Name: `Student Monitor Local`
+4. Add variables:
+   - **Variable**: `baseUrl`, **Value**: `http://localhost:8080`
+   - **Variable**: `apiPath`, **Value**: `/api/auth/signup`
+
+**Step 21: Update Requests to use Environment Variables**
+1. Change URL from `http://localhost:8080/api/auth/signup` 
+2. To: `{{baseUrl}}{{apiPath}}`
+
+---
+
+### **🔄 Running Collection Tests**
+
+**Step 22: Create Test Collection**
+1. Click on your collection name
+2. Click **"Run Collection"**
+3. Select all requests
+4. Click **"Run Student Monitor API Tests"**
+
+**Step 23: View Test Results**
+- **Expected Results**:
+  ```
+  ✅ Auth API - Successful Registration (5/5 tests passed)
+  ✅ Auth API - Existing Email Error (1/1 tests passed)
+  ✅ Auth API - Invalid Email Format (1/1 tests passed)
+  ✅ Auth API - Weak Password Error (1/1 tests passed)
+  
+  📊 Summary: 8/8 tests passed in 1.2s
+  ```
+
+---
+
+### **📈 Advanced Features**
+
+**Step 24: Generate Documentation**
+1. Click on your collection
+2. Click **"View Documentation"**
+3. Click **"Publish"** to create public documentation
+4. **Result**: Professional API documentation with examples
+
+**Step 25: Export Collection for Sharing**
+1. Right-click on collection
+2. Select **"Export"**
+3. Choose **"Collection v2.1"**
+4. Save as: `Student-Monitor-API-Tests.postman_collection.json`
+
+**Step 26: Monitor API Performance**
+1. Click on collection
+2. Click **"Monitor Collection"**
+3. Set schedule: Every 5 minutes
+4. **Result**: Continuous API health monitoring
+
+---
+
+### **🔍 Troubleshooting Common Issues**
+
+**Issue 1: Connection Refused**
+- **Problem**: `Error: connect ECONNREFUSED 127.0.0.1:8080`
+- **Solution**: 
+  ```powershell
+  # Ensure application is running
+  .\mvnw spring-boot:run
+  
+  # Check if port 8080 is available
+  netstat -an | findstr :8080
+  ```
+
+**Issue 2: 404 Not Found**
+- **Problem**: `404 - Not Found`
+- **Solution**: 
+  - Verify URL is exactly: `http://localhost:8080/api/auth/signup`
+  - Check that AuthController has `@RequestMapping("/api/auth")` annotation
+
+**Issue 3: 415 Unsupported Media Type**
+- **Problem**: Missing or incorrect Content-Type header
+- **Solution**: Add header `Content-Type: application/json`
+
+**Issue 4: 400 Bad Request with Generic Message**
+- **Problem**: JSON syntax error in request body
+- **Solution**: Validate JSON format using online JSON validator
+
+---
+
+### **✅ Success Indicators Checklist**
+
+**For Successful Registration (201 Created):**
+- [ ] Status code is 201
+- [ ] Response contains user ID (number)
+- [ ] Response contains email (matches request)
+- [ ] Password is encrypted (not plain text)
+- [ ] Response time < 2000ms
+
+**For Error Cases (400 Bad Request):**
+- [ ] Status code is 400
+- [ ] Response contains error message
+- [ ] Response contains timestamp
+- [ ] Response contains request path
+- [ ] Response time < 1000ms
+
+**For Overall Collection:**
+- [ ] All 4 requests saved in collection
+- [ ] All requests have appropriate tests
+- [ ] Environment variables configured
+- [ ] Collection can run successfully
+- [ ] Documentation generated and accessible
+
+---
+
+### **📝 Next Steps**
+
+**Step 27: Test Student API Endpoints**
+- Create similar requests for `/api/students`
+- Test GET, POST, PUT, DELETE operations
+- Add authentication headers if required
+
+**Step 28: Integration with CI/CD**
+- Export collection and environment
+- Use Newman (CLI) to run tests in pipeline:
+  ```powershell
+  npm install -g newman
+  newman run Student-Monitor-API-Tests.postman_collection.json -e Student-Monitor-Local.postman_environment.json
+  ```
+
+This comprehensive guide provides everything needed to manually test your Auth API endpoints using Postman with professional-grade testing practices.
+
+**Pro Screenshot Tips:**
+- **Split Terminal View**: Show both the test command and detailed output
+- **Highlight JSON**: Use syntax highlighting in terminal or copy to IDE
+- **Network Tab**: Browser DevTools showing actual HTTP requests
+- **Timing Data**: Emphasize response time measurements
+
+---
+
+### **4. 🚀 GitHub Actions - Pipeline Execution**
+
+**What to Capture:**
+- Complete GitHub Actions workflow dashboard
+- Individual job execution details
+- Real-time pipeline progress
+- Deployment status and artifacts
+
+**Navigation Steps:**
+1. Go to your GitHub repository
+2. Click **"Actions"** tab
+3. Select your latest workflow run
+4. Take screenshots at different stages
+
+**Key Elements to Include in Screenshots:**
+
+**4.1 Pipeline Overview Screenshot:**
+- ✅ **Workflow Summary**:
+  ```
+  🏃‍♂️ Student Monitor CI/CD Pipeline ✅ COMPLETED
+  📅 Triggered 15 minutes ago on push to main
+  ⏱️ Total duration: 8m 45s
+  ```
+- ✅ **Job Status Grid**:
+  ```
+  ✅ test              (2m 30s)
+  ✅ ui-tests          (3m 45s) 
+  ✅ security-quality  (1m 20s)
+  ✅ build             (1m 10s)
+  ✅ deploy-staging    (45s)
+  ✅ deploy-production (1m 15s)
+  ```
+
+**4.2 Individual Job Details Screenshot:**
+- ✅ **Expanded Test Job**:
+  ```
+  ✅ 🧪 Run Unit Tests (35s)
+     [INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0
+  ✅ 🔌 Run Integration Tests (25s)  
+     [INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0
+  ✅ 🥒 Run BDD Tests (40s)
+     [INFO] Cucumber scenarios: 7 passed, 0 failed
+  ```
+
+**4.3 Artifacts and Deployment Screenshot:**
+- ✅ **Build Artifacts Section**:
+  ```
+  📦 jar-artifacts (15.2 MB) - Available for 90 days
+  📄 test-results (5.2 MB) - Surefire reports
+  📄 security-reports (2.1 MB) - OWASP & JaCoCo
+  ```
+- ✅ **Deployment Status**:
+  ```
+  🚀 Production Deployment: ✅ SUCCESS
+  🌐 Application URL: https://your-app.herokuapp.com
+  ```
+
+---
+
+### **5. 📈 Test Coverage - JaCoCo Coverage Report**
+
+**What to Capture:**
+- Code coverage dashboard with percentages
+- Package-level coverage breakdown  
+- Class-level coverage details
+- Line-by-line coverage visualization
+
+**How to Generate Coverage Report:**
+```bash
+# Generate JaCoCo coverage report
+.\mvnw clean test jacoco:report
+
+# Open the coverage report
+Invoke-Item target\site\jacoco\index.html
+```
+
+**Key Elements to Include in Screenshots:**
+
+**5.1 Coverage Dashboard:**
+- ✅ **Overall Coverage Metrics**:
+  ```
+  📊 Total Coverage: 87.3%
+  📦 Instructions: 1,247 of 1,429 (87%)
+  🔀 Branches: 156 of 189 (83%)
+  📄 Lines: 312 of 356 (88%)
+  🎯 Methods: 89 of 98 (91%)
+  📚 Classes: 23 of 25 (92%)
+  ```
+
+**5.2 Package Coverage Breakdown:**
+- ✅ **Package-Level Details**:
+  ```
+  📦 com.example.studentmonitor.service     95.2% coverage
+  📦 com.example.studentmonitor.controller  89.1% coverage  
+  📦 com.example.studentmonitor.repository  78.5% coverage
+  📦 com.example.studentmonitor.model       92.3% coverage
+  ```
+
+**5.3 Class Coverage Details:**
+- ✅ **Individual Class Coverage**:
+  ```
+  📄 StudentService.java        98% (49/50 lines)
+  📄 AuthController.java        85% (34/40 lines)
+  📄 PerformanceService.java    91% (42/46 lines)
+  ```
+
+**5.4 Source Code Coverage Visualization:**
+- ✅ **Color-Coded Source View**:
+  - 🟢 **Green lines**: Fully covered code
+  - 🟡 **Yellow lines**: Partially covered branches
+  - 🔴 **Red lines**: Uncovered code
+  - 💎 **Diamonds**: Branch coverage indicators
+
+---
+
+### **🎯 Advanced Screenshot Techniques**
+
+### **Multi-Screen Documentation Strategy:**
+
+**Option 1: Side-by-Side Layout**
+```
+┌─────────────────┬─────────────────┐
+│  Browser/App    │   Terminal      │
+│  (Test Running) │   (Output)      │
+│                 │                 │
+│  🖥️ UI Tests    │  ✅ Results    │
+└─────────────────┴─────────────────┘
+```
+
+**Option 2: Picture-in-Picture**
+```
+┌─────────────────────────────────────┐
+│           Main Report               │
+│  📊 Test Coverage Dashboard        │
+│                                     │
+│  ┌─────────────┐                   │
+│  │   Terminal  │ ← Inset showing   │
+│  │   Output    │   command used    │
+│  └─────────────┘                   │
+└─────────────────────────────────────┘
+```
+
+### **Professional Screenshot Checklist:**
+
+**Before Taking Screenshots:**
+- [ ] Clean desktop background
+- [ ] Close unnecessary applications
+- [ ] Maximize relevant windows
+- [ ] Clear browser cache/history
+- [ ] Use consistent browser zoom (100%)
+- [ ] Enable syntax highlighting in terminal
+
+**During Screenshot:**
+- [ ] Capture at key moments (tests running, not idle)
+- [ ] Include timestamps where visible
+- [ ] Show realistic data (not just "test" values)
+- [ ] Capture both success and informative error states
+- [ ] Include version numbers and environment info
+
+**After Taking Screenshots:**
+- [ ] Verify all text is readable
+- [ ] Check that key metrics are visible
+- [ ] Ensure no sensitive information exposed
+- [ ] Compress images for documentation
+- [ ] Add descriptive filenames
+
+### **Screenshot File Naming Convention:**
+```
+01-selenium-ui-tests-running.png
+02-surefire-test-reports-dashboard.png  
+03-rest-assured-api-test-output.png
+04-github-actions-pipeline-overview.png
+05-github-actions-job-details.png
+06-jacoco-coverage-dashboard.png
+07-jacoco-source-code-coverage.png
+```
+
+### **📋 Screenshot Quality Standards:**
+
+**Resolution & Format:**
+- **Minimum**: 1920x1080 (Full HD)
+- **Preferred**: 2560x1440 (QHD) or higher
+- **Format**: PNG for text clarity, JPG for large images
+- **DPI**: 96 DPI minimum for web, 300 DPI for print
+
+**Content Requirements:**
+- **Visibility**: All text must be clearly readable
+- **Context**: Include enough surrounding UI for orientation
+- **Completeness**: Show complete workflows, not just final results
+- **Authenticity**: Real data and realistic scenarios
+
+**Documentation Value:**
+- **Educational**: Screenshots should teach the process
+- **Reproducible**: Others should be able to recreate what's shown
+- **Professional**: Clean, organized, and well-composed
+- **Current**: Screenshots should reflect the latest code/UI state
 
 ## Key Benefits Demonstrated
 

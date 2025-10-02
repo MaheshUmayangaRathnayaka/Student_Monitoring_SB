@@ -1,22 +1,26 @@
 package com.example.studentmonitor.bdd;
 
-import com.example.studentmonitor.dto.SignupRequest;
-import com.example.studentmonitor.model.User;
-import com.example.studentmonitor.repository.UserRepository;
-import com.example.studentmonitor.service.AuthService;
-import io.cucumber.datatable.DataTable;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.When;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.And;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import java.util.List;
-import java.util.Map;
+import com.example.studentmonitor.dto.SignupRequest;
+import com.example.studentmonitor.model.User;
+import com.example.studentmonitor.repository.UserRepository;
+import com.example.studentmonitor.service.AuthService;
 
-import static org.junit.jupiter.api.Assertions.*;
+import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")

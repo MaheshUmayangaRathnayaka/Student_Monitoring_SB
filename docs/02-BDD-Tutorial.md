@@ -428,9 +428,93 @@ public class CucumberSpringConfiguration {
 
 ## Step 8: View Results
 
-**HTML Report Location:** `target/cucumber-reports/index.html`
+### **Method 1: HTML Report in Browser** 🌐
 
-**JSON Report Location:** `target/cucumber-reports/Cucumber.json`
+**HTML Report Location:** `target/cucumber-reports/report.html`
+
+**Commands to open:**
+```bash
+# Windows - Open in default browser
+start target\cucumber-reports\report.html
+
+# Or using PowerShell
+Invoke-Item target\cucumber-reports\report.html
+
+# Or drag and drop the file into any browser
+```
+
+**JSON Report Location:** `target/cucumber-reports/report.json`
+
+### **Method 2: VS Code Live Server** 🚀
+
+1. **Install Live Server Extension** in VS Code
+2. **Right-click** on `target/cucumber-reports/report.html` 
+3. **Select "Open with Live Server"**
+4. **Report opens** in browser with live reload
+
+### **Method 3: Simple HTTP Server** 🖥️
+
+```bash
+# Navigate to reports directory
+cd target\cucumber-reports
+
+# Python HTTP server (if Python installed)
+python -m http.server 8080
+
+# Then open: http://localhost:8080/report.html
+```
+
+### **Method 4: Direct File Path** 📁
+
+```bash
+# Copy full path and paste in browser address bar
+file:///c:/Users/usr/Desktop/Smon/Student_Monitoring_SB/target/cucumber-reports/report.html
+```
+
+### **Expected Report Content** 📊
+
+The HTML report will show:
+
+```
+🥒 Cucumber Test Report
+┌─────────────────────────────────────────────────────────┐
+│ 📈 Test Summary                                         │
+│ ✅ Total Scenarios: 7                                  │  
+│ ✅ Passed: 7                                           │
+│ ❌ Failed: 0                                           │
+│ ⏭️ Skipped: 0                                          │
+│ ⏱️ Total Duration: ~2-5 seconds                        │
+└─────────────────────────────────────────────────────────┘
+
+📋 Feature Details:
+┌─────────────────────────────────────────────────────────┐
+│ 🎯 Feature: User Registration                          │
+│                                                         │
+│ ✅ Scenario: Successful user registration              │
+│    Given the student monitoring system is available    │
+│    And I am on the registration page                   │
+│    When I enter email "alice@example.com"              │
+│    And I enter password "securePassword123"            │
+│    And I click the register button                     │
+│    Then I should see success message                   │
+│    And a new user account should be created            │
+│                                                         │
+│ ✅ Scenario: Registration fails with existing email    │
+│    [Similar step-by-step breakdown]                    │
+│                                                         │
+│ ✅ Scenario Outline: Registration validation (4 cases) │
+│    [Parameter combinations tested]                     │
+└─────────────────────────────────────────────────────────┘
+```
+
+### **Report Features** 🎨
+
+- **✅ Color-coded results** (Green=Pass, Red=Fail)
+- **📊 Step-by-step execution** details  
+- **⏱️ Execution timing** per scenario
+- **📝 Error messages** for failed steps
+- **📋 Data tables** and parameters clearly shown
+- **🔍 Expandable/collapsible** sections
 
 ## Screenshots to Take
 

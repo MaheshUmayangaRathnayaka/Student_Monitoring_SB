@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.studentmonitor.dto.StudentDTO;
@@ -56,5 +57,13 @@ public class StudentController {
     public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
         studentService.deleteStudent(id);
         return ResponseEntity.noContent().build();
+    }
+    
+    // BUG INTRODUCED: SQL Injection vulnerability in search
+    @GetMapping("/search")
+    public ResponseEntity<List<StudentDTO>> searchStudents(@RequestParam String query) {
+        // VULNERABLE: Direct query parameter usage without validation
+        List<StudentDTO> students = studentService.searchStudentsVulnerable(query);
+        return ResponseEntity.ok(students);
     }
 }

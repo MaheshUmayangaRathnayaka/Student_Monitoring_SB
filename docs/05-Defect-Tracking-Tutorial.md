@@ -55,6 +55,18 @@ sudo apt-get install bugzilla3
 
 ## 🟢 DEFECT TRACKING TEST 1: Bug Discovery and Reporting
 
+### ✅ BUGS ARE NOW READY FOR TESTING!
+The system now contains **6 intentional bugs** for you to discover and report:
+
+1. **🔐 Case-Sensitive Email Login** (Major) - Authentication issue  
+2. **⚡ SQL Injection Vulnerability** (Critical) - Security flaw
+3. **💥 Null Pointer Exception** (Major) - Runtime crash
+4. **🏃 Memory Leak** (Medium) - Performance issue  
+5. **🎨 UI Validation Bug** (Minor) - Frontend problem
+6. **⚡ Race Condition** (Major) - Concurrency issue
+
+📋 **Detailed testing instructions:** See `docs/bug-testing-guide.md`
+
 ### Step 1: Execute Bug Discovery Test
 
 **Execute these commands to discover potential bugs:**
@@ -67,64 +79,471 @@ sudo apt-get install bugzilla3
 
 # Generate test reports
 .\mvnw surefire-report:report
+
+# 📊 VIEW GENERATED TEST REPORT
+# The comprehensive test report has been generated at:
+# target/site/test-report.html
+# 
+# To view it, run this command:
+start target/site/test-report.html
 ```
 
 **Expected Output:** ✅ Identify any test failures or errors for bug reporting
 
 ### Step 2: Create Comprehensive Bug Report
 
-**Bug Report Template for Student Monitoring System:**
+**📋 Step-by-Step Procedure for Creating Bug Reports:**
+
+#### **Step 2.1: Reproduce the Bug**
+Before creating a bug report, first reproduce the issue:
+
+1. **Start Your Application:**
+   ```powershell
+   cd C:\Users\usr\Desktop\Smon\Student_Monitoring_SB
+   .\mvnw spring-boot:run
+   ```
+
+2. **Open Browser and Navigate to the Issue:**
+   - Open Chrome/Firefox
+   - Go to http://localhost:8080
+   - Navigate to the problematic feature
+
+3. **Follow the Steps That Cause the Bug:**
+   - Perform the exact actions that trigger the issue
+   - Take screenshots at each step
+   - Note any error messages or unexpected behavior
+
+#### **Step 2.2: Gather Evidence**
+Collect all necessary information:
+
+1. **Take Screenshots:**
+   - Screenshot of the error/bug
+   - Screenshot of expected vs actual results
+   - Screenshot of browser console (F12 → Console tab)
+
+2. **Collect Application Logs:**
+   ```powershell
+   # View current application logs
+   Get-Content application.log | Select-Object -Last 50
+   
+   # Or redirect logs to file for attachment
+   .\mvnw spring-boot:run > bug-reproduction.log 2>&1
+   ```
+
+3. **Check Browser Console for Errors:**
+   
+   **🌐 What is Browser Console?**
+   The browser console (also called Developer Console) is a built-in debugging tool in web browsers that shows:
+   - JavaScript errors and warnings
+   - Network request failures
+   - Console.log messages from developers
+   - Performance information
+   - Security warnings
+
+   **📱 How to Access Browser Console:**
+
+   **Method 1: Keyboard Shortcut (Fastest)**
+   - **Windows/Linux:** Press `F12`
+   - **Mac:** Press `Cmd + Option + I`
+   - **Alternative:** Press `Ctrl + Shift + I` (Windows/Linux) or `Cmd + Shift + I` (Mac)
+
+   **Method 2: Right-Click Menu**
+   - Right-click anywhere on the webpage
+   - Select "Inspect" or "Inspect Element"
+   - Click on "Console" tab in the developer tools panel
+
+   **Method 3: Browser Menu**
+   - **Chrome:** Menu (⋮) → More Tools → Developer Tools → Console tab
+   - **Firefox:** Menu (☰) → Web Developer → Web Console
+   - **Edge:** Menu (...) → More Tools → Developer Tools → Console tab
+   - **Safari:** Develop menu → Show Web Inspector → Console tab
+
+   **🎯 Step-by-Step Console Access:**
+
+   1. **Open your application in browser:**
+      ```
+      http://localhost:8080
+      ```
+
+   2. **Open Developer Tools:**
+      - Press `F12` key
+      - Developer panel opens (usually at bottom or right side)
+
+   3. **Navigate to Console tab:**
+      - Look for tabs: Elements, Console, Sources, Network, etc.
+      - Click on **"Console"** tab
+
+   4. **What you'll see in Console:**
+      ```
+      Console Panel Layout:
+      ┌─────────────────────────────────────────────────┐
+      │ Elements | Console | Sources | Network | ...    │ ← Tabs
+      ├─────────────────────────────────────────────────┤
+      │ 🔍 Filter: All Levels ▼  🗑️ Clear   ⚙️ Settings │ ← Controls
+      ├─────────────────────────────────────────────────┤
+      │ ℹ️  Application started successfully             │
+      │ ⚠️  Warning: Deprecated API used                │ ← Messages
+      │ ❌ Error: Cannot read property 'name' of null   │
+      │ 🌐 GET /api/students 200 OK                     │
+      └─────────────────────────────────────────────────┘
+      ```
+
+   **🔍 How to Check for Errors:**
+
+   **Step 1: Reproduce the Bug**
+   - Keep Developer Tools open (F12)
+   - Stay on Console tab
+   - Perform the action that causes the bug
+
+   **Step 2: Look for Error Messages**
+   - **Red messages (❌):** JavaScript errors - IMPORTANT for bug reports
+   - **Yellow messages (⚠️):** Warnings - may indicate issues
+   - **Blue messages (ℹ️):** Information - usually not errors
+   - **Network failures:** Failed API calls or resource loading
+
+   **Step 3: Copy Error Details**
+   - Right-click on error message
+   - Select "Copy message" or "Copy stack trace"
+   - Paste into bug report
+
+   **📋 Examples of Console Errors to Look For:**
+
+   **JavaScript Errors:**
+   ```
+   ❌ Uncaught TypeError: Cannot read properties of null (reading 'email')
+      at registerUser (auth.js:45:12)
+      at HTMLButtonElement.<anonymous> (auth.js:23:5)
+   ```
+
+   **Network Errors:**
+   ```
+   ❌ Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+      POST http://localhost:8080/api/auth/register
+   ```
+
+   **Security Errors:**
+   ```
+   ❌ Mixed Content: The page was loaded over HTTPS, but requested an insecure resource
+   ```
+
+   **🔧 Console Error Collection Process:**
+
+   1. **Clear previous messages:**
+      - Click 🗑️ "Clear console" button
+      - Or press `Ctrl + L`
+
+   2. **Reproduce the bug:**
+      - Perform steps that cause the issue
+      - Watch for new error messages
+
+   3. **Filter by error level:**
+      - Click filter dropdown
+      - Select "Errors" to show only error messages
+      - This helps focus on critical issues
+
+   4. **Expand error details:**
+      - Click on error message to expand
+      - Look for stack trace (shows where error occurred)
+      - Copy full error including file names and line numbers
+
+   5. **Check Network tab (if API-related):**
+      - Click "Network" tab next to Console
+      - Look for failed requests (red status codes)
+      - Click on failed request to see details
+
+   **💡 Pro Tips for Console Usage:**
+
+   **Useful Console Commands:**
+   - Type `location.reload()` to refresh page
+   - Type `localStorage` to check stored data
+   - Type `document.cookie` to see cookies
+   - Type `console.clear()` to clear console
+
+   **Console Keyboard Shortcuts:**
+   - `Ctrl + L`: Clear console
+   - `Ctrl + Shift + C`: Select element on page
+   - `Ctrl + Shift + J`: Open console directly
+   - `F5` or `Ctrl + R`: Refresh page (useful after making changes)
+
+4. **Record Environment Details:**
+   ```powershell
+   # Check Java version
+   java -version
+   
+   # Check OS version
+   systeminfo | findstr /B /C:"OS Name" /C:"OS Version"
+   
+   # Check browser version (in address bar type)
+   # chrome://version/ or about:version
+   ```
+
+#### **Step 2.3: Create the Bug Report**
+
+**Where to Create:**
+- **Option A:** In Jira (if you have access)
+- **Option B:** In GitHub Issues (if using GitHub)
+- **Option C:** In a document/text file for documentation
+
+**🎯 Bug Report Template Structure:**
+
 ```
+**BUG REPORT TEMPLATE**
+
+=== BASIC INFORMATION ===
+Bug ID: SMS-001 (assign unique ID)
+Title: [Component] Brief description of the issue
+Date Reported: 2025-10-01
+Reporter: [Your Name/Team]
+Assignee: [Development Team]
+
+=== CLASSIFICATION ===
+Priority: [Critical/High/Medium/Low]
+Severity: [Blocker/Critical/Major/Minor]
+Component: [Authentication/UI/Database/API]
+Type: [Functional/UI/Performance/Security]
+
+=== ENVIRONMENT ===
+Operating System: Windows 11 Pro (Version 22H2)
+Browser: Chrome 118.0.5993.88 (64-bit)
+Java Version: OpenJDK 17.0.12
+Spring Boot Version: 3.1.5
+Database: H2 in-memory
+Test Environment: http://localhost:8080
+Screen Resolution: 1920x1080
+
+=== BUG DETAILS ===
+**Summary:**
+[One-line description of what went wrong]
+
+**Description:**
+[Detailed explanation of the issue, including context]
+
+**Steps to Reproduce:**
+1. [First step with specific details]
+2. [Second step with exact inputs]
+3. [Continue with all steps needed]
+4. [Final step that triggers the bug]
+
+**Expected Result:**
+[What should happen according to requirements]
+
+**Actual Result:**
+[What actually happened - be specific]
+
+**Workaround (if any):**
+[Alternative way to achieve the goal, if possible]
+
+=== TECHNICAL DETAILS ===
+**Error Messages:**
+[Copy exact error messages seen by user]
+
+**Console Logs:**
+[Browser console errors - press F12]
+
+**Application Logs:**
+[Server-side logs from application.log]
+
+**Network Requests:**
+[Failed API calls - check F12 Network tab]
+
+=== ATTACHMENTS ===
+- Screenshot: error-page.png
+- Log file: application-error.log
+- Browser console: console-errors.txt
+- Test data: reproduction-data.csv
+
+=== ADDITIONAL INFORMATION ===
+**Impact:**
+[How this affects users/business]
+
+**Frequency:**
+[Always/Sometimes/Rarely - when does it occur]
+
+**Related Issues:**
+[Links to similar bugs or related tickets]
+```
+
+#### **Step 2.4: Real Example - Duplicate Email Registration Bug**
+
+**Follow these steps to create the example bug:**
+
+1. **Reproduce the Bug:**
+   ```powershell
+   # Start application
+   .\mvnw spring-boot:run
+   
+   # Navigate to: http://localhost:8080/auth/register
+   # Try to register with existing email: admin@example.com
+   ```
+
+2. **Document Using Template:**
+
+```
+=== BUG REPORT ===
+
 Bug ID: SMS-001
 Title: [Authentication] User registration fails with duplicate email
-
-Environment:
-- OS: Windows 11
-- Browser: Chrome 120.0
-- Java Version: JDK 17.0.12
-- Spring Boot Version: 3.1.5
-- Database: H2 in-memory
-- Test Environment: http://localhost:8080
-
-Priority: High
-Severity: Major
-Component: User Authentication
+Date Reported: 2025-10-01
 Reporter: QA Team
 Assignee: Development Team
 
-**Bug Description:**
-When attempting to register a user with an existing email address, 
-the system should display a clear error message but instead shows 
-a generic 500 Internal Server Error.
+=== CLASSIFICATION ===
+Priority: High
+Severity: Major  
+Component: User Authentication
+Type: Functional
+
+=== ENVIRONMENT ===
+Operating System: Windows 11 Pro
+Browser: Chrome 118.0.5993.88
+Java Version: OpenJDK 17.0.12
+Spring Boot Version: 3.1.5
+Database: H2 in-memory
+Test Environment: http://localhost:8080
+
+=== BUG DETAILS ===
+**Summary:**
+Registration with duplicate email shows generic 500 error instead of user-friendly message
+
+**Description:**
+When a user attempts to register with an email that already exists in the system, 
+instead of showing a clear validation error, the application displays a generic 
+HTTP 500 Internal Server Error page. This provides poor user experience and 
+doesn't guide the user on how to resolve the issue.
 
 **Steps to Reproduce:**
-1. Navigate to http://localhost:8080/auth/register
-2. Enter email: "admin@example.com" (existing user)
-3. Enter password: "testpass123"
-4. Click "Register" button
+1. Open browser and navigate to http://localhost:8080/auth/register
+2. Fill in registration form:
+   - Email: admin@example.com (this email already exists)
+   - Password: testpass123
+   - Confirm Password: testpass123
+3. Click "Register" button
+4. Observe the error page displayed
 
 **Expected Result:**
-- Display error message: "Email already exists. Please use a different email."
 - Stay on registration page
-- Show validation error styling
+- Display validation error: "This email is already registered. Please use a different email or try logging in."
+- Highlight the email field with red border
+- Provide link to login page
 
 **Actual Result:**
-- HTTP 500 Internal Server Error displayed
-- Generic error page shown
-- No user-friendly error message
+- Redirected to generic error page
+- Shows "HTTP Status 500 – Internal Server Error" 
+- No guidance for user on how to proceed
+- User cannot easily return to registration form
 
-**Additional Information:**
-- Console logs show: "SQLException: Duplicate entry for key 'email'"
-- Issue occurs in AuthController.registerUser() method
-- Affects user experience significantly
+**Workaround:**
+Users must manually navigate back and try a different email address.
 
-**Test Data:**
-- Existing User Email: admin@example.com
-- Test Password: testpass123
+=== TECHNICAL DETAILS ===
+**Error Messages:**
+HTTP Status 500 – Internal Server Error
+Type: Exception Report
+Message: could not execute statement; SQL [n/a]; constraint [null]
 
-**Screenshots:** [Attach error page screenshot]
-**Logs:** [Attach relevant application logs]
+**Console Logs:**
+ERROR 1062 (23000): Duplicate entry 'admin@example.com' for key 'users.email'
+
+**Application Logs:**
+2025-10-01 14:23:15.123 ERROR 1234 --- [nio-8080-exec-1] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 1062, SQLState: 23000
+2025-10-01 14:23:15.124 ERROR 1234 --- [nio-8080-exec-1] o.h.engine.jdbc.spi.SqlExceptionHelper   : Duplicate entry 'admin@example.com' for key 'users.email'
+
+**Network Requests:**
+POST /auth/register
+Status: 500 Internal Server Error
+Response: Generic error page HTML
+
+=== ATTACHMENTS ===
+- Screenshot: duplicate-email-error-500.png
+- Application logs: registration-error.log
+- Browser console: console-duplicate-email.txt
+
+=== ADDITIONAL INFORMATION ===
+**Impact:**
+- Poor user experience during registration
+- Users may abandon registration process
+- Increases support requests
+- Security concern: error reveals database structure
+
+**Frequency:**
+Always occurs when duplicate email is used
+
+**Related Issues:**
+- Similar issue may exist for duplicate usernames
+- General error handling improvement needed
 ```
+
+#### **Step 2.5: Submit the Bug Report**
+
+## 📂 **WHERE TO ADD YOUR BUG REPORTS**
+
+### **✅ Option 1: Local Documentation (RECOMMENDED FOR LEARNING)**
+**Location:** `docs/bug-reports/` directory
+
+**Ready-to-use structure:**
+- 📁 `docs/bug-reports/README.md` - Bug report index and guidelines
+- 📁 `docs/bug-reports/HOW-TO-ADD-BUG-REPORTS.md` - Complete guide
+- 📄 `docs/bug-reports/SMS-004-case-sensitive-email-login.md` - ✅ Already created
+- 📄 `docs/bug-reports/SMS-005-sql-injection-vulnerability.md` - ✅ Detailed example
+- 📄 Templates ready for SMS-006 through SMS-009
+
+**How to use:**
+1. Navigate to `docs/bug-reports/` folder
+2. Create new file: `SMS-XXX-bug-description.md`
+3. Use comprehensive template from this tutorial
+4. Fill in all sections with your findings
+
+### **🌐 Option 2: Real Jira Instance (PROFESSIONAL)**
+**If you have Jira access:**
+1. Click "Create Issue"
+2. Select Project: "Student Monitoring System"
+3. Issue Type: "Bug"
+4. Fill in all fields from your template
+5. Attach screenshots and logs
+6. Click "Create"
+
+### **📊 Option 3: GitHub Issues (ALTERNATIVE)**
+**In GitHub:**
+1. Go to repository → Issues tab
+2. Click "New Issue"
+3. Use bug report template
+4. Add labels: bug, priority-high, authentication
+5. Submit issue
+
+### **📋 Option 4: Bug Tracking Spreadsheet**
+**Create:** `docs/bug-reports/bug-tracking-sheet.xlsx`
+**Track:** All bugs with status, priority, assignee, dates
+
+#### **Step 2.6: Follow Up**
+After submitting:
+1. **Verify** the bug is assigned to appropriate developer
+2. **Monitor** progress and provide additional info if needed
+3. **Test** the fix when it's ready
+4. **Close** the bug when verified fixed
+
+**🔧 Tools to Help with Bug Reporting:**
+
+**Screenshot Tools:**
+- Windows: Win + Shift + S (Snipping Tool)
+- Browser: F12 → Sources → Screenshot
+- Full page: Browser extensions like "Full Page Screen Capture"
+
+**Log Collection:**
+```powershell
+# Capture application startup logs
+.\mvnw spring-boot:run > startup.log 2>&1
+
+# Monitor logs in real-time
+Get-Content application.log -Wait
+
+# Filter logs for errors only
+Select-String -Path application.log -Pattern "ERROR"
+```
+
+**Browser Dev Tools:**
+- F12 → Console: JavaScript errors
+- F12 → Network: Failed API calls
+- F12 → Application: Local storage issues
 
 ### Step 3: Execute Bug Discovery - Step by Step
 ```bash
@@ -695,3 +1114,47 @@ jira transition SMS-001 "In Progress"
 4. ✅ **Prevention Measures** including code review checklist
 5. ✅ **Verification Tests** confirming fixes work properly
 6. ✅ **Process Documentation** for future bug management
+
+---
+
+## 🎯 **YOUR ASSIGNMENT: COMPLETE THE BUG REPORTS**
+
+### **📂 Quick Start Guide**
+
+**Step 1: Navigate to Bug Reports**
+```powershell
+cd docs/bug-reports
+```
+
+**Step 2: Review What's Ready**
+- ✅ `README.md` - Overview and guidelines
+- ✅ `HOW-TO-ADD-BUG-REPORTS.md` - Complete instructions
+- ✅ `SMS-004-case-sensitive-email-login.md` - Example bug report
+- ✅ `SMS-005-sql-injection-vulnerability.md` - Detailed security example
+
+**Step 3: Create Your Bug Reports**
+Find and document these remaining bugs using the templates provided:
+
+- 📝 **SMS-006**: Password strength validation bypass
+- 📝 **SMS-007**: Unauthorized access to student records  
+- 📝 **SMS-008**: XSS vulnerability in performance comments
+- 📝 **SMS-009**: Session management security flaw
+
+**Step 4: Test Each Bug**
+```powershell
+# Start the application
+.\mvnw spring-boot:run
+
+# Navigate to: http://localhost:8080
+# Follow reproduction steps in each bug report
+```
+
+### **🚀 Success Criteria**
+- [ ] All 6 bugs documented with professional reports
+- [ ] Each report follows the comprehensive template
+- [ ] Reproduction steps are clear and detailed
+- [ ] Security impact is properly assessed
+- [ ] Screenshots and logs are included
+
+### **💡 Pro Tip**
+Start with `docs/bug-reports/SMS-005-sql-injection-vulnerability.md` to see the professional standard expected for your reports!

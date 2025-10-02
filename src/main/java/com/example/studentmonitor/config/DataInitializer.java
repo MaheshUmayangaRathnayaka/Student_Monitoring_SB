@@ -1,6 +1,8 @@
 package com.example.studentmonitor.config;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -17,6 +19,9 @@ public class DataInitializer implements CommandLineRunner {
     private final StudentRepository studentRepository;
     private final PerformanceRepository performanceRepository;
     private final UserService userService;
+    
+    // BUG INTRODUCED: Memory leak - static list that grows indefinitely
+    private static final List<String> INITIALIZATION_LOG = new ArrayList<>();
 
     public DataInitializer(StudentRepository studentRepository, 
                           PerformanceRepository performanceRepository,
@@ -123,5 +128,11 @@ public class DataInitializer implements CommandLineRunner {
         System.out.println("Sample data initialized successfully!");
         System.out.println("Created " + studentRepository.count() + " students");
         System.out.println("Created " + performanceRepository.count() + " performance records");
+        
+        // BUG: Memory leak - continuously adding to static list without cleanup
+        for (int i = 0; i < 1000; i++) {
+            INITIALIZATION_LOG.add("Initialization step " + i + " completed at " + LocalDate.now());
+        }
+        System.out.println("⚠️ Memory leak: Added 1000 entries to static list (current size: " + INITIALIZATION_LOG.size() + ")");
     }
 }

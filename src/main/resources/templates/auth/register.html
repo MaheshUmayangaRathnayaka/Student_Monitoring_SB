@@ -422,10 +422,13 @@
             form.addEventListener('submit', function(event) {
                 let isValid = true;
                 
-                // Check password match
-                if (passwordInput.value !== confirmPasswordInput.value) {
+                // BUG INTRODUCED: Password match validation is broken
+                // The condition is inverted - it validates when passwords DON'T match!
+                if (passwordInput.value === confirmPasswordInput.value) {
+                    // WRONG: This triggers error when passwords actually MATCH
                     confirmPasswordInput.classList.add('is-invalid');
                     isValid = false;
+                    console.log('🐛 BUG: Password validation is inverted!');
                 }
                 
                 if (!isValid) {

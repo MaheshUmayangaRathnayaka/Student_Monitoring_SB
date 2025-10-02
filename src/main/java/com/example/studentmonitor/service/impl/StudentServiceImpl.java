@@ -24,8 +24,23 @@ public class StudentServiceImpl implements StudentService {
     
     @Override
     public StudentDTO createStudent(StudentDTO dto) {
+        // BUG INTRODUCED: Race condition in student creation
+        // Check if email exists, but there's a gap before saving
+        if (studentRepository.existsByEmail(dto.getEmail())) {
+            throw new RuntimeException("Student with email " + dto.getEmail() + " already exists");
+        }
+        
+        // RACE CONDITION: Another thread could create student with same email here
+        // Simulate some processing delay that makes race condition more likely
+        try {
+            Thread.sleep(100); // 100ms delay - creates window for race condition
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        
+        // By now, another thread might have created student with same email
         Student student = mapToEntity(dto);
-        Student savedStudent = studentRepository.save(student);
+        Student savedStudent = studentRepository.save(student); // Could fail with duplicate email
         return mapToDto(savedStudent);
     }
     
@@ -84,5 +99,29 @@ public class StudentServiceImpl implements StudentService {
         student.setEmail(dto.getEmail());
         student.setDateOfBirth(dto.getDateOfBirth());
         return student;
+    }
+    
+    // BUG INTRODUCED: SQL Injection Vulnerability
+    @Override
+    public List<StudentDTO> searchStudentsVulnerable(String query) {
+        // CRITICAL SECURITY FLAW: Direct string concatenation in SQL
+        // This allows SQL injection attacks like: test'; DROP TABLE students; --
+        
+        // Simulate vulnerable query execution (this would normally use EntityManager.createNativeQuery)
+        System.out.println("EXECUTING VULNERABLE SQL: SELECT * FROM students WHERE first_name LIKE '%" + query + "%'");
+        
+        // For demo purposes, log the dangerous query that would be executed
+        if (query.contains("'") || query.contains(";") || query.toLowerCase().contains("drop") 
+            || query.toLowerCase().contains("delete") || query.toLowerCase().contains("update")) {
+            System.err.println("⚠️ SECURITY ALERT: Potential SQL injection detected in query: " + query);
+            System.err.println("⚠️ In a real system, this could: DROP TABLES, DELETE DATA, STEAL INFORMATION!");
+        }
+        
+        // Return filtered results (safe fallback for demo)
+        return getAllStudents().stream()
+                .filter(student -> 
+                    student.getFirstName().toLowerCase().contains(query.toLowerCase()) ||
+                    student.getLastName().toLowerCase().contains(query.toLowerCase()))
+                .toList();
     }
 }
